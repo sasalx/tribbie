@@ -21,10 +21,17 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
+  "vueCompilerOptions": {
+    "plugins": [
+      "vue-router/volar/sfc-route-blocks",
+      "vue-router/volar/sfc-typed-router"
+    ]
+  },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.vue",
+    "typed-router.d.ts",
     "auto-imports.d.ts",
     "components.d.ts",
     "shims.d.ts"

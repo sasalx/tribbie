@@ -12,6 +12,7 @@ declare global {
   const customRef: typeof import('vue').customRef
   const defineAsyncComponent: typeof import('vue').defineAsyncComponent
   const defineComponent: typeof import('vue').defineComponent
+  const definePage: typeof import('vue-router/experimental').definePage
   const effectScope: typeof import('vue').effectScope
   const getCurrentInstance: typeof import('vue').getCurrentInstance
   const getCurrentScope: typeof import('vue').getCurrentScope
@@ -59,7 +60,7 @@ declare global {
   const useCssModule: typeof import('vue').useCssModule
   const useCssVars: typeof import('vue').useCssVars
   const useId: typeof import('vue').useId
-  const useLink: typeof import('vue-router').useLink
+  const useLink: typeof import('vue-router/auto').useLink
   const useModel: typeof import('vue').useModel
   const useRoute: typeof import('vue-router').useRoute
   const useRouter: typeof import('vue-router').useRouter
