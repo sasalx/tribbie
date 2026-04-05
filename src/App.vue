@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { MenuOption } from 'naive-ui'
-import { darkTheme, NConfigProvider, NLayout, NLayoutContent, NLayoutSider, NMenu } from 'naive-ui'
+import { darkTheme } from 'naive-ui'
 
 const router = useRouter()
 const route = useRoute()
@@ -27,7 +27,7 @@ function handleMenuSelect(key: string) {
 
 <template>
   <NConfigProvider :theme="darkTheme">
-    <NLayout has-sider style="height: 100vh">
+    <NLayout has-sider class="h-screen">
       <NLayoutSider
         bordered
         collapse-mode="width"
@@ -43,7 +43,7 @@ function handleMenuSelect(key: string) {
         />
       </NLayoutSider>
 
-      <NLayoutContent content-style="padding: 24px;">
+      <NLayoutContent content-style="padding: 24px">
         <RouterView />
       </NLayoutContent>
     </NLayout>

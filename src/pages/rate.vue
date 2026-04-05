@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { NButton, NForm, NFormItem, NInputNumber } from 'naive-ui'
-
 const valueA = ref<number | null>(null)
 const valueB = ref<number | null>(null)
 
@@ -10,10 +8,12 @@ function handleSubmit() {
 </script>
 
 <template>
-  <NForm label-placement="top" style="max-width: 400px">
+  <NForm label-placement="top" class="max-w-400px">
     <NFormItem label="Value A">
       <NInputNumber
-        v-model:value="valueA" style="width: 100%" :min="0"
+        v-model:value="valueA"
+        class="w-full"
+        :min="0"
         :max="10"
         :step="0.5"
         placeholder="Enter a value"
@@ -21,7 +21,9 @@ function handleSubmit() {
     </NFormItem>
     <NFormItem label="Value B">
       <NInputNumber
-        v-model:value="valueB" style="width: 100%" :min="0"
+        v-model:value="valueB"
+        class="w-full"
+        :min="0"
         :max="10"
         :step="0.5"
         placeholder="Enter a value"
