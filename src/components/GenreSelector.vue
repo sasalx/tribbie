@@ -6,12 +6,13 @@ const props = defineProps<{
   genres: string[]
 }>()
 
+const primaryGenre = defineModel<string | null>('dropdown', { default: null })
+const selectedGenres = defineModel<string[]>('tags', { default: () => [] })
+
 const options = computed(() =>
   props.genres.map(genre => ({ label: genre, value: genre })),
 )
-
-const primaryGenre = defineModel<string | null>('dropdown', { default: null })
-const selectedGenres = defineModel<string[]>('tags', { default: () => [] })
+const hasError = computed(() => selectedGenres.value.length === 0)
 
 watch(
   () => props.genres,
@@ -52,8 +53,6 @@ const renderTag: SelectRenderTag = ({ option, handleClose }) => {
     { default: () => option.label },
   )
 }
-
-const hasError = computed(() => selectedGenres.value.length === 0)
 </script>
 
 <template>
