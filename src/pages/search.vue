@@ -8,6 +8,7 @@ const router = useRouter()
 const query = ref(String(route.query.q ?? ''))
 const mediaType = ref<MediaType | null>((route.query.type as MediaType) ?? null)
 const results = ref<MediaResponse[]>([])
+const loading = ref(false)
 
 const hasResults = computed(() => results.value.length > 0)
 
@@ -16,6 +17,7 @@ function toggleMediaType(type: MediaType) {
 }
 
 async function handleSearch() {
+  loading.value = true
   await router.replace({
     query: {
       ...route.query,
@@ -29,6 +31,7 @@ async function handleSearch() {
       ...(mediaType.value && { type: mediaType.value }),
     },
   })
+  loading.value = false
 }
 
 function handleKeydown(e: KeyboardEvent) {
@@ -71,6 +74,7 @@ if (query.value) {
           v-model:value="query"
           placeholder="Search anime, manga..."
           size="large"
+          :loading="loading"
           @keydown="handleKeydown"
         />
         <div class="flex justify-end">

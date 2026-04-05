@@ -5,15 +5,23 @@ import { displayAltMediaTitle } from '~/utils/stringUtils'
 defineProps<{
   data: MediaResponse
 }>()
+
+const cardImageSize = {
+  width: 120,
+  height: 180,
+}
 </script>
 
 <template>
   <div class="flex items-center gap-4">
-    <img
+    <NImage
       :src="data.cover_image"
       :alt="data.title_romaji"
-      class="w-24 h-36 object-cover rounded"
-    >
+      :width="cardImageSize.width"
+      :height="cardImageSize.height"
+      object-fit="cover"
+      class="rounded"
+    />
     <div class="flex flex-col gap-1">
       <h1 class="text-2xl font-bold">
         {{ data.title_romaji }}
