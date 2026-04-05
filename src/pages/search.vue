@@ -2,8 +2,11 @@
 import type { MediaResponse, MediaType } from '~/types/anilist'
 import { api } from '~/api/client'
 
-const query = ref('')
-const mediaType = ref<MediaType | null>(null)
+const route = useRoute()
+const router = useRouter()
+
+const query = ref(String(route.query.q ?? ''))
+const mediaType = ref<MediaType | null>((route.query.type as MediaType) ?? null)
 const results = ref<MediaResponse[]>([])
 
 const hasResults = computed(() => results.value.length > 0)
@@ -13,6 +16,13 @@ function toggleMediaType(type: MediaType) {
 }
 
 async function handleSearch() {
+  await router.replace({
+    query: {
+      ...route.query,
+      q: query.value,
+      ...(mediaType.value ? { type: mediaType.value } : { type: undefined }),
+    },
+  })
   results.value = await api.get<MediaResponse[]>('/media/search', {
     params: {
       q: query.value,
@@ -26,6 +36,10 @@ function handleKeydown(e: KeyboardEvent) {
     e.preventDefault()
     handleSearch()
   }
+}
+
+if (query.value) {
+  handleSearch()
 }
 </script>
 

@@ -14,10 +14,6 @@ const menuOptions: MenuOption[] = [
     label: 'Search',
     key: '/search',
   },
-  {
-    label: 'Rate',
-    key: '/rate',
-  },
 ]
 
 function handleMenuSelect(key: string) {
