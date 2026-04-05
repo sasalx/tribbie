@@ -43,7 +43,7 @@ function handleMenuSelect(key: string) {
         />
       </NLayoutSider>
 
-      <NLayoutContent content-style="padding: 24px">
+      <NLayoutContent content-style="padding: 24px; height: 100%">
         <RouterView />
       </NLayoutContent>
     </NLayout>

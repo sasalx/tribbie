@@ -12,6 +12,7 @@ export interface MediaResponse {
   episodes: number
   genres: string[]
   cover_image: string
+  banner_image: string
   average_score: number
   mean_score: number
   media_type: MediaType
