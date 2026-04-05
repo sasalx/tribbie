@@ -1,15 +1,25 @@
 <script setup lang="ts">
+import type { MediaResponse } from '~/types/anilist'
 import type { DimensionsResponse } from '~/types/kansou'
 import { api } from '~/api/client'
 
-// const routeParamID = useRoute('/rate/[id]').params
 const dimensions = ref<DimensionsResponse | null>(null)
+const media = ref<MediaResponse | null>(null)
 const values = ref<Record<string, number | null>>({})
+const primaryGenre = ref<string | null>(null)
+const selectedGenres = ref<string[]>([])
+
+const { id } = useRoute('/rate/[id]').params
 
 onMounted(async () => {
-  dimensions.value = await api.get<DimensionsResponse>('/dimensions')
+  const [dimensionsData, mediaData] = await Promise.all([
+    api.get<DimensionsResponse>('/dimensions'),
+    api.get<MediaResponse>(`/media/${id}`),
+  ])
+  dimensions.value = dimensionsData
+  media.value = mediaData
   values.value = Object.fromEntries(
-    dimensions.value.dimensions.map(d => [d.key, null]),
+    dimensionsData.dimensions.map(d => [d.key, null]),
   )
 })
 
@@ -18,7 +28,11 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <NForm label-placement="top" class="max-w-400px">
+  <MediaHeroSection v-if="media" :data="media" />
+  <NDivider />
+  <GenreSelector v-if="media" v-model:dropdown="primaryGenre" v-model:tags="selectedGenres" :genres="media.genres" class="max-w-400px" />
+  <NDivider />
+  <NForm label-placement="top" class="max-w-400px" :disabled="selectedGenres.length === 0">
     <NFormItem
       v-for="dimension in dimensions?.dimensions"
       :key="dimension.key"
@@ -36,7 +50,7 @@ async function handleSubmit() {
         />
       </div>
     </NFormItem>
-    <NButton type="primary" block @click="handleSubmit">
+    <NButton type="primary" block :disabled="selectedGenres.length === 0" @click="handleSubmit">
       Submit
     </NButton>
   </NForm>
