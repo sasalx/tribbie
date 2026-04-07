@@ -44,6 +44,7 @@ export interface ScoreResultMeta {
   config_hash: string
   primary_genre: string
   primary_genre_weight: number
+  effective_weight_sum: number
 }
 
 export interface ScoreResultResponse {
