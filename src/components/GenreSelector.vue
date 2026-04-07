@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { SelectRenderTag } from 'naive-ui'
 import { NTag } from 'naive-ui'
+import { toFirstLetterCapitalString } from '~/utils/stringUtils'
 
 const props = defineProps<{
   genres: string[]
@@ -10,7 +11,7 @@ const primaryGenre = defineModel<string | null>('dropdown', { default: null })
 const selectedGenres = defineModel<string[]>('tags', { default: () => [] })
 
 const options = computed(() =>
-  props.genres.map(genre => ({ label: genre, value: genre })),
+  props.genres.map(genre => ({ label: toFirstLetterCapitalString(genre), value: genre })),
 )
 const hasError = computed(() => selectedGenres.value.length === 0)
 

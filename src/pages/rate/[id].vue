@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { MediaResponse } from '~/types/anilist'
-import type { DimensionsResponse } from '~/types/kansou'
+import type { DimensionsResponse, ReviewEntry, ScoreResultResponse } from '~/types/kansou'
 import { api } from '~/api/client'
 import { decimalToPercentage } from '~/utils/stringUtils'
 
@@ -11,6 +11,12 @@ const primaryGenre = ref<string | null>(null)
 const selectedGenres = ref<string[]>([])
 const loading = ref(true)
 
+const canSubmit = computed(() =>
+  selectedGenres.value.length > 0
+  && Object.values(values.value).every(v => v !== null),
+)
+
+const router = useRouter()
 const { id } = useRoute('/rate/[id]').params
 
 onMounted(async () => {
@@ -27,6 +33,25 @@ onMounted(async () => {
 })
 
 async function handleSubmit() {
+  if (!canSubmit.value) {
+    return
+  }
+
+  const result = await api.post<ScoreResultResponse>('/score', {
+    media_id: Number(id),
+    scores: values.value as Record<string, number>,
+    primary_genre: primaryGenre.value ?? '',
+    selected_genres: selectedGenres.value,
+  } satisfies ReviewEntry)
+
+  await router.push({
+    path: '/result',
+    state: {
+      result: JSON.stringify(result),
+      coverImage: media.value?.cover_image,
+      bannerImage: media.value?.banner_image,
+    },
+  })
 }
 </script>
 
@@ -111,8 +136,8 @@ async function handleSubmit() {
                   </NInputGroup>
                 </div>
               </NFormItem>
-              <NButton type="primary" block :disabled="selectedGenres.length === 0" @click="handleSubmit">
-                Submit
+              <NButton type="primary" block :disabled="!canSubmit" @click="handleSubmit">
+                Score!
               </NButton>
             </NForm>
           </div>

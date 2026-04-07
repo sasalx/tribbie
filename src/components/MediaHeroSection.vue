@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { MediaResponse } from '~/types/anilist'
-import { displayAltMediaTitle } from '~/utils/stringUtils'
+import type { MediaHeroSectionType } from '~/types/tribbie'
+import { displayAltMediaTitle, toFirstLetterCapitalString } from '~/utils/stringUtils'
 
 defineProps<{
-  data: MediaResponse
+  data: MediaHeroSectionType
 }>()
 
 const cardImageSize = {
@@ -23,6 +23,9 @@ const cardImageSize = {
       class="rounded"
     />
     <div class="flex flex-col gap-1">
+      <NTag type="info" :bordered="false" size="small" class="self-start">
+        {{ toFirstLetterCapitalString(data.media_type) }}
+      </NTag>
       <h1 class="text-2xl font-bold">
         {{ data.title_romaji }}
       </h1>
