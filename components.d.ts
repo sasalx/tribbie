@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    BannerImage: typeof import('./src/components/BannerImage.vue')['default']
     GenreSelector: typeof import('./src/components/GenreSelector.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     MediaCard: typeof import('./src/components/MediaCard.vue')['default']

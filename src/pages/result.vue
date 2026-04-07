@@ -22,16 +22,7 @@ const heroData: MediaHeroSectionType = {
 
 <template>
   <div class="min-h-full">
-    <div class="w-full h-48 overflow-hidden">
-      <NImage
-        :src="bannerImage"
-        preview-disabled
-        width="100%"
-        height="192"
-        object-fit="cover"
-        class="w-full"
-      />
-    </div>
+    <BannerImage :src="bannerImage" />
 
     <div class="max-w-3xl mx-auto px-4 -mt-8 pb-12 relative z-10">
       <NCard bordered>

@@ -57,18 +57,7 @@ async function handleSubmit() {
 
 <template>
   <div class="min-h-full">
-    <div class="w-full overflow-hidden">
-      <NSkeleton v-if="loading" height="192px" :sharp="false" />
-      <NImage
-        v-else
-        :src="media?.banner_image"
-        preview-disabled
-        width="100%"
-        height="100%"
-        object-fit="cover"
-        class="w-full"
-      />
-    </div>
+    <BannerImage :src="loading ? undefined : media?.banner_image" />
 
     <div class="max-w-3xl mx-auto px-4 -mt-12 pb-12 relative z-10">
       <NCard bordered>
