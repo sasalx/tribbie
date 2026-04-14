@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { MediaResponse } from '~/types/anilist'
-import type { DimensionsResponse, ReviewEntry, ScoreResultResponse } from '~/types/kansou'
+import type { DimensionsResponse, GenerateScoreBody, ScoreResultResponse } from '~/types/kansou'
 import { api } from '~/api/client'
 import { decimalToPercentage } from '~/utils/stringUtils'
 
@@ -42,7 +42,7 @@ async function handleSubmit() {
     scores: values.value as Record<string, number>,
     primary_genre: primaryGenre.value ?? '',
     selected_genres: selectedGenres.value,
-  } satisfies ReviewEntry)
+  } satisfies GenerateScoreBody)
 
   await router.push({
     path: '/result',

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { DataTableColumns } from 'naive-ui'
-import type { ResultDimension, ScoreResultResponse } from '~/types/kansou'
+import type { PublishScoreBody, ResultDimension, ScoreResultResponse } from '~/types/kansou'
 import type { MediaHeroSectionType } from '~/types/tribbie'
+import { api } from '~/api/client'
 import WeightDetail from '~/components/WeightDetail.vue'
 
 const state = window.history.state as {
@@ -9,9 +10,18 @@ const state = window.history.state as {
   coverImage?: string
   bannerImage?: string
 }
-
 const result = JSON.parse(state.result) as ScoreResultResponse
 const bannerImage = state.bannerImage
+const heroData: MediaHeroSectionType = {
+  cover_image: state.coverImage ?? '',
+  media_type: result.meta.media_type,
+  title_romaji: result.meta.title_romaji,
+  title_english: result.meta.title_english,
+  title_native: '',
+}
+
+const isPublishLoading = ref(false)
+const addNotes = ref(false)
 
 const columns: DataTableColumns<ResultDimension> = [
   { title: 'Dimension', key: 'label' },
@@ -29,13 +39,28 @@ const columns: DataTableColumns<ResultDimension> = [
   },
   { title: 'Contribution to Final Score', key: 'contribution', align: 'center', titleAlign: 'center' },
 ]
+const scoreTableAsNotes = ref(
+  [
+    `Final Score: ${Number(result.final_score.toFixed(2))}/10`,
+    '',
+    ...result.breakdown.map((dim) => {
+      const weight = `${(dim.final_weight * 100).toFixed(1)}%`
+      const skipped = dim.skipped ? ' [skipped]' : ''
+      return `• ${dim.label}: ${dim.score}/10 — weight ${weight}, contribution ${dim.contribution}${skipped}`
+    }),
+  ].join('\n'),
+)
 
-const heroData: MediaHeroSectionType = {
-  cover_image: state.coverImage ?? '',
-  media_type: result.meta.media_type,
-  title_romaji: result.meta.title_romaji,
-  title_english: result.meta.title_english,
-  title_native: '',
+async function handlePublish() {
+  isPublishLoading.value = true
+
+  await api.post('/score/publish', {
+    media_id: result.meta.media_id,
+    score: Number(result.final_score.toFixed(2)),
+    notes: addNotes.value ? scoreTableAsNotes.value : '',
+  } satisfies PublishScoreBody)
+
+  isPublishLoading.value = false
 }
 </script>
 
@@ -67,6 +92,26 @@ const heroData: MediaHeroSectionType = {
             :bordered="false"
             size="small"
           />
+          <div class="flex flex-col gap-2">
+            <div class="flex items-center gap-2">
+              <NSwitch v-model:value="addNotes" />
+              <div class="flex flex-col">
+                <span>Add Notes</span>
+                <span class="text-xs opacity-50">Send score table data as notes in Anilist in simplified format</span>
+              </div>
+            </div>
+            <NInput
+              v-if="addNotes"
+              v-model:value="scoreTableAsNotes"
+              type="textarea"
+              :autosize="{ minRows: 4 }"
+            />
+          </div>
+          <div class="flex justify-center">
+            <NButton type="primary" :loading="isPublishLoading" @click="handlePublish">
+              Send it to Anilist!
+            </NButton>
+          </div>
         </div>
       </NCard>
     </div>

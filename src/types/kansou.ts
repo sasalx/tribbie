@@ -12,7 +12,7 @@ export interface DimensionsResponse {
   dimensions: Dimension[]
 }
 
-export interface ReviewEntry {
+export interface GenerateScoreBody {
   media_id: number
   primary_genre: string
   scores: Record<string, number>
@@ -51,4 +51,10 @@ export interface ScoreResultResponse {
   final_score: number
   breakdown: ResultDimension[]
   meta: ScoreResultMeta
+}
+
+export interface PublishScoreBody {
+  media_id: number
+  notes: string
+  score: number
 }
