@@ -25,6 +25,25 @@ const heroData: MediaHeroSectionType = {
 const isPublishLoading = ref(false)
 const addNotes = ref(false)
 
+const scoreJokes: Record<number, string> = {
+  1: 'The bar was on the ground. This tripped over it.',
+  2: 'Technically above zero. The least impressive sentence in the English language.',
+  3: 'This is what happens when something tries its best and its best is... that.',
+  4: 'The Goldilocks of disappointment: not too bad, not too good.',
+  5: 'Five out of ten: officially the Switzerland of opinions.',
+  6: 'A polite standing ovation. Everyone claps, no one rushes the stage.',
+  7: 'Seven is statistically the most popular answer.',
+  8: 'Almost perfect — the two missing points just add character.',
+  9: 'A 9 is basically a 10 with trust issues.',
+  10: 'You either found something truly special, or you are in love. Either way, congratulations.',
+}
+
+const scoreJoke = computed(() => {
+  if (beautifyNumber(result.final_score, 1) === '3.6') {
+    return 'Not great, not terrible.'
+  }
+  return scoreJokes[Math.round(result.final_score)] ?? ''
+})
 const scoreColor = computed(() => {
   const score = result.final_score
 
@@ -59,7 +78,7 @@ const columns: DataTableColumns<ResultDimension> = [
       effectiveWeightSum: result.meta.effective_weight_sum,
     }),
   },
-  { title: 'Contribution to Final Score', key: 'contribution', align: 'center', titleAlign: 'center' },
+  { title: 'Contribution to Final Score', key: 'contribution', align: 'center', titleAlign: 'center', render: row => beautifyNumber(row.contribution, 2) },
 ]
 const scoreTableAsNotes = ref(
   [
@@ -106,6 +125,7 @@ async function handlePublish() {
             >
               <span class="text-xl font-bold">{{ beautifyNumber(result.final_score, 1) }}</span>
             </NProgress>
+            <span v-if="scoreJoke" class="text-sm opacity-60 text-center">{{ scoreJoke }}</span>
           </div>
           <NDivider />
           <NDataTable
