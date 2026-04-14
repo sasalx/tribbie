@@ -4,6 +4,7 @@ import type { PublishScoreBody, ResultDimension, ScoreResultResponse } from '~/t
 import type { MediaHeroSectionType } from '~/types/tribbie'
 import { api } from '~/api/client'
 import WeightDetail from '~/components/WeightDetail.vue'
+import { beautifyNumber, decimalToPercentage } from '~/utils/stringUtils'
 
 const state = window.history.state as {
   result: string
@@ -41,12 +42,12 @@ const columns: DataTableColumns<ResultDimension> = [
 ]
 const scoreTableAsNotes = ref(
   [
-    `Final Score: ${Number(result.final_score.toFixed(2))}/10`,
+    `Final Score: ${beautifyNumber(result.final_score, 2)}/10`,
     '',
-    ...result.breakdown.map((dim) => {
-      const weight = `${(dim.final_weight * 100).toFixed(1)}%`
-      const skipped = dim.skipped ? ' [skipped]' : ''
-      return `• ${dim.label}: ${dim.score}/10 — weight ${weight}, contribution ${dim.contribution}${skipped}`
+    ...result.breakdown.map((dimension) => {
+      const weight = decimalToPercentage(dimension.final_weight)
+      const skipped = dimension.skipped ? ' [skipped]' : ''
+      return `• ${dimension.label}: ${dimension.score}/10 — weight ${weight}, contribution ${dimension.contribution}${skipped}`
     }),
   ].join('\n'),
 )
@@ -56,7 +57,7 @@ async function handlePublish() {
 
   await api.post('/score/publish', {
     media_id: result.meta.media_id,
-    score: Number(result.final_score.toFixed(2)),
+    score: Number(beautifyNumber(result.final_score, 2)),
     notes: addNotes.value ? scoreTableAsNotes.value : '',
   } satisfies PublishScoreBody)
 
@@ -81,7 +82,7 @@ async function handlePublish() {
               :show-indicator="true"
               gap-position="bottom"
             >
-              <span class="text-xl font-bold">{{ result.final_score.toFixed(2) }}</span>
+              <span class="text-xl font-bold">{{ beautifyNumber(result.final_score, 2) }}</span>
             </NProgress>
           </div>
           <NDivider />

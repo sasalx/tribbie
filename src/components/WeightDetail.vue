@@ -40,7 +40,7 @@ const calculatedFinalWeight = computed(() => effectiveWeight.value / props.effec
           <span>Effective Weight Sum</span>
           <span class="text-xs">(Sum of Effective Weights of All Dimensions)</span>
         </span>
-        <span>{{ props.effectiveWeightSum }}</span>
+        <span>{{ beautifyNumber(props.effectiveWeightSum) }}</span>
       </div>
       <NDivider />
       <div class="flex justify-between font-semibold">
@@ -48,7 +48,7 @@ const calculatedFinalWeight = computed(() => effectiveWeight.value / props.effec
           <span>Final Weight</span>
           <span class="text-xs font-normal opacity-60">(Effective Weight ÷ Effective Weight Sum)</span>
         </span>
-        <span>{{ calculatedFinalWeight.toFixed(3) }}</span>
+        <span>{{ beautifyNumber(calculatedFinalWeight) }}</span>
       </div>
     </div>
   </NModal>

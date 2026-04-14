@@ -7,7 +7,7 @@ export function toFirstLetterCapitalString(str: string): string {
 }
 
 export function beautifyNumber(value: number, decimals = 3): string {
-  return (Math.round(value * 10 ** decimals) / 10 ** decimals).toString()
+  return (Math.trunc(value * 10 ** decimals) / 10 ** decimals).toString()
 }
 
 export function displayAltMediaTitle(titleEnglish?: string, titleNative?: string): string {
