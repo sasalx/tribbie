@@ -6,4 +6,5 @@ export interface MediaHeroSectionType {
   title_romaji: string
   title_english: string
   title_native: string
+  anilist_url: string
 }

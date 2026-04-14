@@ -19,10 +19,31 @@ const heroData: MediaHeroSectionType = {
   title_romaji: result.meta.title_romaji,
   title_english: result.meta.title_english,
   title_native: '',
+  anilist_url: result.meta.anilist_url,
 }
 
 const isPublishLoading = ref(false)
 const addNotes = ref(false)
+
+const scoreColor = computed(() => {
+  const score = result.final_score
+
+  if (score === 10) {
+    return '#f97316' // orange
+  }
+  else if (score >= 8) {
+    return '#a855f7' // purple
+  }
+  else if (score >= 6) {
+    return '#3b82f6' // blue
+  }
+  else if (score >= 4) {
+    return '#eab308' // yellow
+  }
+  else {
+    return '#ef4444' // red
+  }
+})
 
 const columns: DataTableColumns<ResultDimension> = [
   { title: 'Dimension', key: 'label' },
@@ -42,7 +63,7 @@ const columns: DataTableColumns<ResultDimension> = [
 ]
 const scoreTableAsNotes = ref(
   [
-    `Final Score: ${beautifyNumber(result.final_score, 2)}/10`,
+    `Final Score: ${beautifyNumber(result.final_score, 1)}/10`,
     '',
     ...result.breakdown.map((dimension) => {
       const weight = decimalToPercentage(dimension.final_weight)
@@ -57,7 +78,7 @@ async function handlePublish() {
 
   await api.post('/score/publish', {
     media_id: result.meta.media_id,
-    score: Number(beautifyNumber(result.final_score, 2)),
+    score: Number(beautifyNumber(result.final_score, 1)),
     notes: addNotes.value ? scoreTableAsNotes.value : '',
   } satisfies PublishScoreBody)
 
@@ -71,7 +92,7 @@ async function handlePublish() {
 
     <div class="max-w-3xl mx-auto px-4 -mt-8 pb-12 relative z-10">
       <NCard bordered>
-        <div class="flex flex-col gap-6">
+        <div class="flex flex-col gap-4">
           <MediaHeroSection :data="heroData" />
           <NDivider />
           <div class="flex flex-col items-center gap-2">
@@ -80,9 +101,10 @@ async function handlePublish() {
               type="dashboard"
               :percentage="result.final_score * 10"
               :show-indicator="true"
+              :color="scoreColor"
               gap-position="bottom"
             >
-              <span class="text-xl font-bold">{{ beautifyNumber(result.final_score, 2) }}</span>
+              <span class="text-xl font-bold">{{ beautifyNumber(result.final_score, 1) }}</span>
             </NProgress>
           </div>
           <NDivider />

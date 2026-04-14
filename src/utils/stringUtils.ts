@@ -1,5 +1,5 @@
 export function decimalToPercentage(value: number): string {
-  return `${(value * 100).toFixed(1)}%`
+  return `${Math.trunc(value * 1000) / 10}%`
 }
 
 export function toFirstLetterCapitalString(str: string): string {

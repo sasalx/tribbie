@@ -6,6 +6,10 @@ defineProps<{
   data: MediaHeroSectionType
 }>()
 
+function openAnilistUrl(url: string) {
+  window.open(url, '_blank')
+}
+
 const cardImageSize = {
   width: 120,
   height: 180,
@@ -26,7 +30,10 @@ const cardImageSize = {
       <NTag type="info" :bordered="false" size="small" class="self-start">
         {{ toFirstLetterCapitalString(data.media_type) }}
       </NTag>
-      <h1 class="text-2xl font-bold">
+      <h1
+        class="text-2xl font-bold cursor-pointer hover:underline"
+        @click="openAnilistUrl(data.anilist_url)"
+      >
         {{ data.title_romaji }}
       </h1>
       <span class="text-sm opacity-60">{{ displayAltMediaTitle(data.title_english, data.title_native) }}</span>
