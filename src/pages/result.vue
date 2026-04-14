@@ -87,7 +87,7 @@ const scoreTableAsNotes = ref(
     ...result.breakdown.map((dimension) => {
       const weight = decimalToPercentage(dimension.final_weight)
       const skipped = dimension.skipped ? ' [skipped]' : ''
-      return `• ${dimension.label}: ${dimension.score}/10 — weight ${weight}, contribution ${dimension.contribution}${skipped}`
+      return `• ${dimension.label}: ${dimension.score}/10 — weight ${weight}, contribution ${beautifyNumber(dimension.contribution, 2)}${skipped}`
     }),
   ].join('\n'),
 )
