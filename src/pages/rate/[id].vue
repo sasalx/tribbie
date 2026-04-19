@@ -4,31 +4,39 @@ import type { DimensionsResponse, GenerateScoreBody, ScoreResultResponse } from 
 import { api } from '~/api/client'
 import { decimalToPercentage } from '~/utils/stringUtils'
 
+interface FieldEntry {
+  value: number | null
+  skipped: boolean
+}
+
 const dimensions = ref<DimensionsResponse | null>(null)
 const media = ref<MediaResponse | null>(null)
-const values = ref<Record<string, number | null>>({})
-const primaryGenre = ref<string | null>(null)
+const fields = ref<Record<string, FieldEntry>>({})
 const selectedGenres = ref<string[]>([])
+const primaryGenre = ref<string | null>(null)
 const loading = ref(true)
-
-const canSubmit = computed(() =>
-  selectedGenres.value.length > 0
-  && Object.values(values.value).every(v => v !== null),
-)
+const allowSkip = ref(false)
 
 const router = useRouter()
 const { id } = useRoute('/rate/[id]').params
+
+const canSubmit = computed(() =>
+  selectedGenres.value.length > 0
+  && Object.values(fields.value).every(field => field.skipped || field.value !== null),
+)
 
 onMounted(async () => {
   const [dimensionsData, mediaData] = await Promise.all([
     api.get<DimensionsResponse>('/dimensions'),
     api.get<MediaResponse>(`/media/${id}`),
   ])
+
   dimensions.value = dimensionsData
   media.value = mediaData
-  values.value = Object.fromEntries(
-    dimensionsData.dimensions.map(d => [d.key, null]),
+  fields.value = Object.fromEntries(
+    dimensionsData.dimensions.map(d => [d.key, { value: null, skipped: false }]),
   )
+
   loading.value = false
 })
 
@@ -39,7 +47,11 @@ async function handleSubmit() {
 
   const result = await api.post<ScoreResultResponse>('/score', {
     media_id: Number(id),
-    scores: values.value as Record<string, number>,
+    scores: Object.fromEntries(
+      Object.entries(fields.value)
+        .filter(([, field]) => !field.skipped)
+        .map(([key, field]) => [key, field.value]),
+    ) as Record<string, number>,
     primary_genre: primaryGenre.value ?? '',
     selected_genres: selectedGenres.value,
   } satisfies GenerateScoreBody)
@@ -102,6 +114,10 @@ async function handleSubmit() {
               :genres="media!.genres"
             />
             <NDivider />
+            <div class="flex items-center gap-2 mb-4">
+              <NSwitch v-model:value="allowSkip" />
+              <span>Allow Skipping</span>
+            </div>
             <NForm label-placement="top" :disabled="selectedGenres.length === 0">
               <NFormItem
                 v-for="dimension in dimensions?.dimensions"
@@ -112,17 +128,25 @@ async function handleSubmit() {
                   <span class="text-xs opacity-60 pl-0.5">{{ dimension.description }}</span>
                   <NInputGroup>
                     <NInputNumber
-                      v-model:value="values[dimension.key]"
+                      v-model:value="fields[dimension.key].value"
                       class="w-full"
                       :min="0"
                       :max="10"
                       :step="0.5"
+                      :disabled="fields[dimension.key].skipped"
                       placeholder="Enter a value"
                     />
                     <NInputGroupLabel class="w-[calc(3ch+2rem)] text-center">
                       {{ decimalToPercentage(dimension.weight) }}
                     </NInputGroupLabel>
                   </NInputGroup>
+                  <NCheckbox
+                    v-if="allowSkip"
+                    v-model:checked="fields[dimension.key].skipped"
+                    class="mt-1"
+                  >
+                    Skip this dimension
+                  </NCheckbox>
                 </div>
               </NFormItem>
               <NButton type="primary" block :disabled="!canSubmit" @click="handleSubmit">

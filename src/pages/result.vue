@@ -66,28 +66,35 @@ const scoreColor = computed(() => {
 
 const columns: DataTableColumns<ResultDimension> = [
   { title: 'Dimension', key: 'label' },
-  { title: 'Score', key: 'score' },
+  { title: 'Score', key: 'score', align: 'center', titleAlign: 'center', render: row => row.skipped ? h('span', { class: 'text-red-500' }, 'Skipped') : String(row.score) },
   {
     title: 'Weight',
     key: 'final_weight',
-    render: row => h(WeightDetail, {
-      label: row.label,
-      baseWeight: row.base_weight,
-      appliedMultiplier: row.applied_multiplier,
-      finalWeight: row.final_weight,
-      effectiveWeightSum: result.meta.effective_weight_sum,
-    }),
+    align: 'center',
+    titleAlign: 'center',
+    render: row => row.skipped
+      ? '—'
+      : h(WeightDetail, {
+          label: row.label,
+          baseWeight: row.base_weight,
+          appliedMultiplier: row.applied_multiplier,
+          finalWeight: row.final_weight,
+          effectiveWeightSum: result.meta.effective_weight_sum,
+        }),
   },
-  { title: 'Contribution to Final Score', key: 'contribution', align: 'center', titleAlign: 'center', render: row => beautifyNumber(row.contribution, 2) },
+  { title: 'Contribution to Final Score', key: 'contribution', align: 'center', titleAlign: 'center', render: row => row.skipped ? '—' : beautifyNumber(row.contribution, 2) },
 ]
 const scoreTableAsNotes = ref(
   [
     `Final Score: ${beautifyNumber(result.final_score, 1)}/10`,
     '',
     ...result.breakdown.map((dimension) => {
+      if (dimension.skipped) {
+        return `• ${dimension.label}: Skipped`
+      }
+
       const weight = decimalToPercentage(dimension.final_weight)
-      const skipped = dimension.skipped ? ' [skipped]' : ''
-      return `• ${dimension.label}: ${dimension.score}/10 — weight ${weight}, contribution ${beautifyNumber(dimension.contribution, 2)}${skipped}`
+      return `• ${dimension.label}: ${dimension.score}/10 — weight ${weight}, contribution ${beautifyNumber(dimension.contribution, 2)}`
     }),
   ].join('\n'),
 )
@@ -131,7 +138,6 @@ async function handlePublish() {
           <NDataTable
             :columns="columns"
             :data="result.breakdown"
-            :row-props="(row) => ({ style: row.skipped ? 'text-decoration: line-through; opacity: 0.4;' : '' })"
             :bordered="false"
             size="small"
           />
@@ -140,7 +146,7 @@ async function handlePublish() {
               <NSwitch v-model:value="addNotes" />
               <div class="flex flex-col">
                 <span>Add Notes</span>
-                <span class="text-xs opacity-50">Send score table data as notes in Anilist in simplified format</span>
+                <span class="text-xs opacity-50">Send score table data as notes in Anilist</span>
               </div>
             </div>
             <NInput
