@@ -2,6 +2,7 @@
 import type { DataTableColumns } from 'naive-ui'
 import type { PublishScoreBody, ResultDimension, ScoreResultResponse } from '~/types/kansou'
 import type { MediaHeroSectionType } from '~/types/tribbie'
+import { useNotification } from 'naive-ui'
 import { api } from '~/api/client'
 import WeightDetail from '~/components/WeightDetail.vue'
 import { beautifyNumber, decimalToPercentage } from '~/utils/stringUtils'
@@ -22,6 +23,7 @@ const heroData: MediaHeroSectionType = {
   anilist_url: result.meta.anilist_url,
 }
 
+const notification = useNotification()
 const isPublishLoading = ref(false)
 const addNotes = ref(false)
 
@@ -120,6 +122,7 @@ async function handlePublish() {
   } satisfies PublishScoreBody)
 
   isPublishLoading.value = false
+  notification.success({ title: 'Success', description: 'Your score has been sent to AniList.', duration: 5000 })
 }
 </script>
 

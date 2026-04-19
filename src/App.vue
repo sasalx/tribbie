@@ -23,25 +23,27 @@ function handleMenuSelect(key: string) {
 
 <template>
   <NConfigProvider :theme="darkTheme">
-    <NLayout has-sider class="h-screen">
-      <NLayoutSider
-        bordered
-        collapse-mode="width"
-        :collapsed-width="64"
-        :width="200"
-        show-trigger
-      >
-        <NMenu
-          :value="route.path"
-          :options="menuOptions"
+    <NNotificationProvider>
+      <NLayout has-sider class="h-screen">
+        <NLayoutSider
+          bordered
+          collapse-mode="width"
           :collapsed-width="64"
-          @update:value="handleMenuSelect"
-        />
-      </NLayoutSider>
+          :width="200"
+          show-trigger
+        >
+          <NMenu
+            :value="route.path"
+            :options="menuOptions"
+            :collapsed-width="64"
+            @update:value="handleMenuSelect"
+          />
+        </NLayoutSider>
 
-      <NLayoutContent content-style="padding: 24px; height: 100%">
-        <RouterView />
-      </NLayoutContent>
-    </NLayout>
+        <NLayoutContent content-style="padding: 24px; height: 100%">
+          <RouterView />
+        </NLayoutContent>
+      </NLayout>
+    </NNotificationProvider>
   </NConfigProvider>
 </template>
