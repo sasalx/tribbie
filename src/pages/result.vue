@@ -84,20 +84,31 @@ const columns: DataTableColumns<ResultDimension> = [
   },
   { title: 'Contribution to Final Score', key: 'contribution', align: 'center', titleAlign: 'center', render: row => row.skipped ? '—' : beautifyNumber(row.contribution, 2) },
 ]
-const scoreTableAsNotes = ref(
-  [
+const scoreTableAsNotes = ref((() => {
+  const lines: string[] = [
     `Final Score: ${beautifyNumber(result.final_score, 1)}/10`,
+    `Effective Weight Sum: ${beautifyNumber(result.meta.effective_weight_sum)}`,
     '',
-    ...result.breakdown.map((dimension) => {
-      if (dimension.skipped) {
-        return `• ${dimension.label}: Skipped`
-      }
+  ]
 
-      const weight = decimalToPercentage(dimension.final_weight)
-      return `• ${dimension.label}: ${dimension.score}/10 — weight ${weight}, contribution ${beautifyNumber(dimension.contribution, 2)}`
-    }),
-  ].join('\n'),
-)
+  result.breakdown.forEach((dim) => {
+    const child = ' '
+
+    if (dim.skipped) {
+      lines.push(`${dim.label}: Skipped`)
+    }
+    else {
+      lines.push(`${dim.label}: ${dim.score}/10`)
+      lines.push(`${child} ├─ Base Weight: ${decimalToPercentage(dim.base_weight)}`)
+      lines.push(`${child} ├─ Genre Multiplier: × ${beautifyNumber(dim.applied_multiplier)}`)
+      lines.push(`${child} ├─ Effective Weight: ${beautifyNumber(dim.base_weight * dim.applied_multiplier)}`)
+      lines.push(`${child} ├─ Final Weight: ${decimalToPercentage(dim.final_weight)}`)
+      lines.push(`${child} └─ Contribution: ${beautifyNumber(dim.contribution, 2)}`)
+    }
+  })
+
+  return lines.join('\n')
+})())
 
 async function handlePublish() {
   isPublishLoading.value = true
