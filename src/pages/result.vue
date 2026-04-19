@@ -34,7 +34,7 @@ const scoreJokes: Record<number, string> = {
   6: 'A polite standing ovation. Everyone claps, no one rushes the stage.',
   7: 'Seven is statistically the most popular answer.',
   8: 'Almost perfect — the two missing points just add character.',
-  9: 'A 9 is basically a 10 with trust issues.',
+  9: 'So close to being the peak.',
   10: 'You either found something truly special, or you are in love. Either way, congratulations.',
 }
 
@@ -48,7 +48,7 @@ const scoreColor = computed(() => {
   const score = result.final_score
 
   if (score === 10) {
-    return '#f97316' // orange
+    return '#63e2b7' // green
   }
   else if (score >= 8) {
     return '#a855f7' // purple
