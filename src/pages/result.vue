@@ -24,8 +24,11 @@ const heroData: MediaHeroSectionType = {
 }
 
 const notification = useNotification()
+const { addEntry } = useHistory()
 const isPublishLoading = ref(false)
 const addNotes = ref(false)
+
+addEntry({ result, coverImage: state.coverImage, bannerImage: state.bannerImage })
 
 const scoreTexts: Record<number, string> = {
   1: 'Bad day for having eyes and ears eh?',

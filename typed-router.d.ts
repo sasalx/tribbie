@@ -41,6 +41,13 @@ declare module 'vue-router/auto-routes' {
       { all: ParamValue<false> },
       | never
     >,
+    '/history': RouteRecordInfo<
+      '/history',
+      '/history',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/rate/[id]': RouteRecordInfo<
       '/rate/[id]',
       '/rate/:id',
@@ -84,6 +91,12 @@ declare module 'vue-router/auto-routes' {
     'src/pages/[...all].vue': {
       routes:
         | '/[...all]'
+      views:
+        | never
+    }
+    'src/pages/history.vue': {
+      routes:
+        | '/history'
       views:
         | never
     }
