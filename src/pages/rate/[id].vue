@@ -145,12 +145,12 @@ async function handleSubmit() {
                     v-model:checked="fields[dimension.key].skipped"
                     class="mt-1"
                   >
-                    Skip this dimension
+                    Tribbilize this dimension
                   </NCheckbox>
                 </div>
               </NFormItem>
               <NButton type="primary" block :disabled="!canSubmit" @click="handleSubmit">
-                Score!
+                Let Tribbie Judge!
               </NButton>
             </NForm>
           </div>

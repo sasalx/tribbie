@@ -27,24 +27,24 @@ const notification = useNotification()
 const isPublishLoading = ref(false)
 const addNotes = ref(false)
 
-const scoreJokes: Record<number, string> = {
-  1: 'The bar was on the ground. This tripped over it.',
-  2: 'Technically above zero. The least impressive sentence in the English language.',
-  3: 'This is what happens when something tries its best and its best is... that.',
-  4: 'The Goldilocks of disappointment: not too bad, not too good.',
-  5: 'Five out of ten: officially the Switzerland of opinions.',
-  6: 'A polite standing ovation. Everyone claps, no one rushes the stage.',
-  7: 'Seven is statistically the most popular answer.',
-  8: 'Almost perfect — the two missing points just add character.',
-  9: 'So close to being the peak.',
-  10: 'You either found something truly special, or you are in love. Either way, congratulations.',
+const scoreTexts: Record<number, string> = {
+  1: 'Bad day for having eyes and ears eh?',
+  2: 'One might wonder what made you to continue to watch the show.',
+  3: 'There was a spark but you swiped left.',
+  4: 'Was it missing the lamb sauce?',
+  5: 'Have you ever wondered what people actually mean when they say something is aggressively mid?',
+  6: 'This is fine.',
+  7: 'Time to discuss what this show could have been in forums.',
+  8: 'Two years later you will look at your list and say "Oh yeah this one was pretty good".',
+  9: 'Has your journey been good? Has it been worthwile?',
+  10: 'Absolute cinema!',
 }
 
-const scoreJoke = computed(() => {
+const scoreText = computed(() => {
   if (beautifyNumber(result.final_score, 1) === '3.6') {
     return 'Not great, not terrible.'
   }
-  return scoreJokes[Math.round(result.final_score)] ?? ''
+  return scoreTexts[Math.round(result.final_score)] ?? ''
 })
 const scoreColor = computed(() => {
   const score = result.final_score
@@ -137,16 +137,18 @@ async function handlePublish() {
           <NDivider />
           <div class="flex flex-col items-center gap-2">
             <span class="text-sm opacity-60">Final Score</span>
-            <NProgress
-              type="dashboard"
-              :percentage="result.final_score * 10"
-              :show-indicator="true"
-              :color="scoreColor"
-              gap-position="bottom"
-            >
-              <span class="text-xl font-bold">{{ beautifyNumber(result.final_score, 1) }}</span>
-            </NProgress>
-            <span v-if="scoreJoke" class="text-sm opacity-60 text-center">{{ scoreJoke }}</span>
+            <div :class="result.final_score === 10 ? 'elation-glow' : ''">
+              <NProgress
+                type="circle"
+                :percentage="result.final_score * 10"
+                :show-indicator="true"
+                :color="scoreColor"
+                gap-position="bottom"
+              >
+                <span class="text-xl font-bold">{{ beautifyNumber(result.final_score, 1) }}</span>
+              </NProgress>
+            </div>
+            <span v-if="scoreText" class="text-sm opacity-60 text-center">{{ scoreText }}</span>
           </div>
           <NDivider />
           <NDataTable
@@ -172,7 +174,7 @@ async function handlePublish() {
           </div>
           <div class="flex justify-center">
             <NButton type="primary" :loading="isPublishLoading" @click="handlePublish">
-              Send it to Anilist!
+              Send to Aha's Record
             </NButton>
           </div>
         </div>
@@ -180,3 +182,20 @@ async function handlePublish() {
     </div>
   </div>
 </template>
+
+<style scoped>
+@keyframes elation-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 12px 4px #63e2b7;
+  }
+  50% {
+    box-shadow: 0 0 24px 10px #06b6d4;
+  }
+}
+
+.elation-glow {
+  border-radius: 50%;
+  animation: elation-pulse 2s ease-in-out infinite;
+}
+</style>
