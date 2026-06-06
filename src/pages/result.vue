@@ -7,6 +7,8 @@ import { api } from '~/api/client'
 import WeightDetail from '~/components/WeightDetail.vue'
 import { beautifyNumber, decimalToPercentage } from '~/utils/stringUtils'
 
+const { t } = useI18n()
+
 const state = window.history.state as {
   result: string
   coverImage?: string
@@ -31,25 +33,13 @@ const addNotes = ref(false)
 
 addEntry({ result, coverImage: state.coverImage, bannerImage: state.bannerImage })
 
-const scoreTexts: Record<number, string> = {
-  1: 'Bad day for having eyes and ears eh?',
-  2: 'One might wonder what made you to continue to watch the show.',
-  3: 'There was a spark but you swiped left.',
-  4: 'Was it missing the lamb sauce?',
-  5: 'Have you ever wondered what people actually mean when they say something is aggressively mid?',
-  6: 'This is fine.',
-  7: 'Time to discuss what this show could have been in forums.',
-  8: 'Two years later you will look at your list and say "Oh yeah this one was pretty good".',
-  9: 'Has your journey been good? Has it been worthwile?',
-  10: 'Absolute cinema!',
-}
-
 const scoreText = computed(() => {
   if (beautifyNumber(result.final_score, 1) === '3.6') {
-    return 'Not great, not terrible.'
+    return t('result.scoreTexts.special36')
   }
-  return scoreTexts[Math.round(result.final_score)] ?? ''
+  return t(`result.scoreTexts.${Math.round(result.final_score)}`)
 })
+
 const scoreColor = computed(() => {
   const score = result.final_score
 
@@ -71,10 +61,16 @@ const scoreColor = computed(() => {
 })
 
 const columns: DataTableColumns<ResultDimension> = [
-  { title: 'Dimension', key: 'label' },
-  { title: 'Score', key: 'score', align: 'center', titleAlign: 'center', render: row => row.skipped ? h('span', { class: 'text-red-500' }, 'Skipped') : String(row.score) },
+  { title: t('result.columns.dimension'), key: 'label' },
   {
-    title: 'Weight',
+    title: t('result.columns.score'),
+    key: 'score',
+    align: 'center',
+    titleAlign: 'center',
+    render: row => row.skipped ? h('span', { class: 'text-red-500' }, t('result.skipped')) : String(row.score),
+  },
+  {
+    title: t('result.columns.weight'),
     key: 'final_weight',
     align: 'center',
     titleAlign: 'center',
@@ -91,28 +87,33 @@ const columns: DataTableColumns<ResultDimension> = [
           secondaryGenresMultiplier: row.secondary_genres_multiplier ?? 0,
         }),
   },
-  { title: 'Contribution to Final Score', key: 'contribution', align: 'center', titleAlign: 'center', render: row => row.skipped ? '—' : beautifyNumber(row.contribution, 2) },
+  {
+    title: t('result.columns.contribution'),
+    key: 'contribution',
+    align: 'center',
+    titleAlign: 'center',
+    render: row => row.skipped ? '—' : beautifyNumber(row.contribution, 2),
+  },
 ]
+
 const scoreTableAsNotes = ref((() => {
   const lines: string[] = [
-    `Final Score: ${beautifyNumber(result.final_score, 1)}/10`,
-    `Effective Weight Sum: ${beautifyNumber(result.meta.effective_weight_sum)}`,
+    t('result.notes.finalScore', { score: beautifyNumber(result.final_score, 1) }),
+    t('result.notes.effectiveWeightSum', { sum: beautifyNumber(result.meta.effective_weight_sum) }),
     '',
   ]
 
   result.breakdown.forEach((dim) => {
-    const child = ' '
-
     if (dim.skipped) {
-      lines.push(`${dim.label}: Skipped`)
+      lines.push(t('result.notes.dimensionSkipped', { label: dim.label }))
     }
     else {
-      lines.push(`${dim.label}: ${dim.score}/10`)
-      lines.push(`${child} ├─ Base Weight: ${decimalToPercentage(dim.base_weight)}`)
-      lines.push(`${child} ├─ Genre Multiplier: × ${beautifyNumber(dim.applied_multiplier)}`)
-      lines.push(`${child} ├─ Effective Weight: ${beautifyNumber(dim.base_weight * dim.applied_multiplier)}`)
-      lines.push(`${child} ├─ Final Weight: ${decimalToPercentage(dim.final_weight)}`)
-      lines.push(`${child} └─ Contribution: ${beautifyNumber(dim.contribution, 2)}`)
+      lines.push(t('result.notes.dimensionScore', { label: dim.label, score: dim.score }))
+      lines.push(t('result.notes.baseWeight', { value: decimalToPercentage(dim.base_weight) }))
+      lines.push(t('result.notes.genreMultiplier', { value: beautifyNumber(dim.applied_multiplier) }))
+      lines.push(t('result.notes.effectiveWeight', { value: beautifyNumber(dim.base_weight * dim.applied_multiplier) }))
+      lines.push(t('result.notes.finalWeight', { value: decimalToPercentage(dim.final_weight) }))
+      lines.push(t('result.notes.contribution', { value: beautifyNumber(dim.contribution, 2) }))
     }
   })
 
@@ -129,7 +130,7 @@ async function handlePublish() {
   } satisfies PublishScoreBody)
 
   isPublishLoading.value = false
-  notification.success({ title: 'Success', description: 'Your score has been sent to AniList.', duration: 5000 })
+  notification.success({ title: t('result.publishSuccess'), description: t('result.publishSuccessDesc'), duration: 5000 })
 }
 </script>
 
@@ -143,7 +144,7 @@ async function handlePublish() {
           <MediaHeroSection :data="heroData" />
           <NDivider />
           <div class="flex flex-col items-center gap-2">
-            <span class="text-sm opacity-60">Final Score</span>
+            <span class="text-sm opacity-60">{{ t('result.finalScore') }}</span>
             <div :class="result.final_score === 10 ? 'elation-glow' : ''">
               <NProgress
                 type="circle"
@@ -168,8 +169,8 @@ async function handlePublish() {
             <div class="flex items-center gap-2">
               <NSwitch v-model:value="addNotes" />
               <div class="flex flex-col">
-                <span>Add Notes</span>
-                <span class="text-xs opacity-50">Send score table data as notes in Anilist</span>
+                <span>{{ t('result.addNotes') }}</span>
+                <span class="text-xs opacity-50">{{ t('result.addNotesDesc') }}</span>
               </div>
             </div>
             <NInput
@@ -181,7 +182,7 @@ async function handlePublish() {
           </div>
           <div class="flex justify-center">
             <NButton type="primary" :loading="isPublishLoading" @click="handlePublish">
-              Send to Aha's Record
+              {{ t('result.publishButton') }}
             </NButton>
           </div>
         </div>

@@ -2,6 +2,7 @@
 import type { MediaResponse, MediaType } from '~/types/anilist'
 import { api } from '~/api/client'
 
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
@@ -54,17 +55,17 @@ if (query.value) {
     >
       <div class="flex flex-col items-center gap-1">
         <h1 class="text-3xl font-semibold">
-          What are you looking for?
+          {{ t('search.title') }}
         </h1>
         <p class="text-sm opacity-50">
-          Search for anime or manga to rate.
+          {{ t('search.subtitle') }}
         </p>
         <NRadioGroup :value="mediaType">
           <NRadioButton value="ANIME" @click.prevent="toggleMediaType('ANIME')">
-            Anime
+            {{ t('search.anime') }}
           </NRadioButton>
           <NRadioButton value="MANGA" @click.prevent="toggleMediaType('MANGA')">
-            Manga
+            {{ t('search.manga') }}
           </NRadioButton>
         </NRadioGroup>
       </div>
@@ -72,7 +73,7 @@ if (query.value) {
       <div class="w-full max-w-2xl flex flex-col gap-2">
         <NInput
           v-model:value="query"
-          placeholder="Search anime, manga..."
+          :placeholder="t('search.inputPlaceholder')"
           size="large"
           :loading="loading"
           @keydown="handleKeydown"
@@ -83,7 +84,7 @@ if (query.value) {
             :disabled="!query.trim()"
             @click="handleSearch"
           >
-            Search
+            {{ t('search.searchButton') }}
           </NButton>
         </div>
       </div>

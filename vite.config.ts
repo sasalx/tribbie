@@ -21,6 +21,7 @@ export default defineConfig({
     AutoImport({
       imports: [
         'vue',
+        'vue-i18n',
         VueRouterAutoImports,
         {
           // add any other imports you were relying on

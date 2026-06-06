@@ -12,6 +12,8 @@ const props = defineProps<{
   secondaryGenresMultiplier: number
 }>()
 
+const { t } = useI18n()
+
 const show = ref(false)
 
 const blendedMultiplier = computed(() => {
@@ -39,59 +41,59 @@ const calculatedFinalWeight = computed(() => effectiveWeight.value / props.effec
   <NModal v-model:show="show" preset="card" :title="`${props.label} — Weight Breakdown`" style="max-width: 600px">
     <div class="flex flex-col gap-3 text-sm">
       <div class="flex justify-between">
-        <span class="font-semibold opacity-60">Base Dimension Weight</span>
+        <span class="font-semibold opacity-60">{{ t('weightDetail.baseDimensionWeight') }}</span>
         <span>{{ props.baseWeight }}</span>
       </div>
       <template v-if="props.primaryGenreMultiplier !== 0">
         <div class="flex justify-between">
-          <span class="font-semibold opacity-60">Primary Genre Weight</span>
+          <span class="font-semibold opacity-60">{{ t('weightDetail.primaryGenreWeight') }}</span>
           <span>{{ beautifyNumber(props.primaryGenreWeight) }}</span>
         </div>
         <div class="flex justify-between">
-          <span class="font-semibold opacity-60">Primary Genre Multiplier</span>
+          <span class="font-semibold opacity-60">{{ t('weightDetail.primaryGenreMultiplier') }}</span>
           <span>{{ beautifyNumber(props.primaryGenreMultiplier) }}</span>
         </div>
         <div v-if="props.secondaryGenresMultiplier !== 0" class="flex justify-between">
-          <span class="font-semibold opacity-60">Secondary Genre Multiplier</span>
+          <span class="font-semibold opacity-60">{{ t('weightDetail.secondaryGenreMultiplier') }}</span>
           <span>{{ beautifyNumber(props.secondaryGenresMultiplier) }}</span>
         </div>
       </template>
       <div class="flex justify-between">
         <span class="flex flex-col opacity-60">
-          <span class="font-semibold">Genre Multiplier</span>
+          <span class="font-semibold">{{ t('weightDetail.genreMultiplier') }}</span>
           <span v-if="props.primaryGenreMultiplier === 0" class="text-xs">
-            (Raw genre multiplier)
+            {{ t('weightDetail.genreMultiplierRaw') }}
           </span>
           <span v-else-if="props.secondaryGenresMultiplier === 0" class="text-xs">
-            (Primary genre multiplier)
+            {{ t('weightDetail.genreMultiplierPrimaryOnly') }}
           </span>
           <span v-else class="flex flex-col text-xs">
-            <span>(Primary genre multiplier × Primary genre weight)</span>
-            <span>+</span>
-            <span>(Secondary genre multiplier × (1 - Primary genre weight))</span>
+            <span>{{ t('weightDetail.genreMultiplierBlendedLine1') }}</span>
+            <span>{{ t('weightDetail.genreMultiplierBlendedLine2') }}</span>
+            <span>{{ t('weightDetail.genreMultiplierBlendedLine3') }}</span>
           </span>
         </span>
         <span>× {{ beautifyNumber(blendedMultiplier) }}</span>
       </div>
       <div class="flex justify-between">
         <span class="flex flex-col opacity-60">
-          <span class="font-semibold">Effective Weight</span>
-          <span class="text-xs">(Base Dimension Weight × Genre Multiplier)</span>
+          <span class="font-semibold">{{ t('weightDetail.effectiveWeight') }}</span>
+          <span class="text-xs">{{ t('weightDetail.effectiveWeightDesc') }}</span>
         </span>
         <span>{{ beautifyNumber(effectiveWeight) }}</span>
       </div>
       <div class="flex justify-between">
         <span class="flex flex-col opacity-60">
-          <span class="font-semibold">Effective Weight Sum</span>
-          <span class="text-xs">(Sum of Effective Weights of All Dimensions)</span>
+          <span class="font-semibold">{{ t('weightDetail.effectiveWeightSum') }}</span>
+          <span class="text-xs">{{ t('weightDetail.effectiveWeightSumDesc') }}</span>
         </span>
         <span>{{ beautifyNumber(props.effectiveWeightSum) }}</span>
       </div>
       <NDivider />
       <div class="flex justify-between font-semibold">
         <span class="flex flex-col">
-          <span>Final Weight</span>
-          <span class="text-xs font-normal opacity-60">(Effective Weight ÷ Effective Weight Sum)</span>
+          <span>{{ t('weightDetail.finalWeight') }}</span>
+          <span class="text-xs font-normal opacity-60">{{ t('weightDetail.finalWeightDesc') }}</span>
         </span>
         <span>{{ beautifyNumber(calculatedFinalWeight) }}</span>
       </div>

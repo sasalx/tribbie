@@ -60,6 +60,7 @@ declare global {
   const useCssModule: typeof import('vue').useCssModule
   const useCssVars: typeof import('vue').useCssVars
   const useHistory: typeof import('./src/composables/useHistory').useHistory
+  const useI18n: typeof import('vue-i18n').useI18n
   const useId: typeof import('vue').useId
   const useLink: typeof import('vue-router/auto').useLink
   const useModel: typeof import('vue').useModel

@@ -2,6 +2,7 @@
 import { useHistory } from '~/composables/useHistory'
 import { beautifyNumber } from '~/utils/stringUtils'
 
+const { t } = useI18n()
 const router = useRouter()
 const { entries } = useHistory()
 
@@ -28,11 +29,11 @@ function formatTime(time: number) {
 <template>
   <div class="max-w-3xl mx-auto flex flex-col gap-4">
     <h1 class="text-2xl font-semibold">
-      History
+      {{ t('history.title') }}
     </h1>
 
     <div v-if="entries.length === 0" class="opacity-50 text-sm">
-      No ratings yet. Use the app maybe?
+      {{ t('history.empty') }}
     </div>
 
     <NTimeline v-else>

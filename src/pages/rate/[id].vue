@@ -4,6 +4,8 @@ import type { DimensionsResponse, GenerateScoreBody, ScoreResultResponse } from 
 import { api } from '~/api/client'
 import { decimalToPercentage } from '~/utils/stringUtils'
 
+const { t } = useI18n()
+
 interface FieldEntry {
   value: number | null
   skipped: boolean
@@ -116,7 +118,7 @@ async function handleSubmit() {
             <NDivider />
             <div class="flex items-center gap-2 mb-4">
               <NSwitch v-model:value="allowSkip" />
-              <span>Allow Skipping</span>
+              <span>{{ t('rate.allowSkipping') }}</span>
             </div>
             <NForm label-placement="top" :disabled="selectedGenres.length === 0">
               <NFormItem
@@ -134,7 +136,7 @@ async function handleSubmit() {
                       :max="10"
                       :step="0.5"
                       :disabled="fields[dimension.key].skipped"
-                      placeholder="Enter a value"
+                      :placeholder="t('rate.inputPlaceholder')"
                     />
                     <NInputGroupLabel class="w-[calc(3ch+2rem)] text-center">
                       {{ decimalToPercentage(dimension.weight) }}
@@ -145,12 +147,12 @@ async function handleSubmit() {
                     v-model:checked="fields[dimension.key].skipped"
                     class="mt-1"
                   >
-                    Tribbilize this dimension
+                    {{ t('rate.skipCheckbox') }}
                   </NCheckbox>
                 </div>
               </NFormItem>
               <NButton type="primary" block :disabled="!canSubmit" @click="handleSubmit">
-                Let Tribbie Judge!
+                {{ t('rate.submitButton') }}
               </NButton>
             </NForm>
           </div>

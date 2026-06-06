@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { tm } = useI18n()
+const taglines = computed(() => tm('home.taglines') as string[])
 </script>
 
 <template>
@@ -6,7 +8,7 @@
     <img src="/tribbie-home.jpg" alt="Tribbie" class="max-h-[70vh] object-contain rounded-xl">
 
     <div class="flex flex-col gap-4">
-      <div v-for="word in ['Search', 'Score', 'Ship it']" :key="word" class="text-5xl font-bold">
+      <div v-for="word in taglines" :key="word" class="text-5xl font-bold">
         <span class="gradient-text">{{ word }}</span>
       </div>
     </div>

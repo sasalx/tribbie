@@ -7,6 +7,8 @@ const props = defineProps<{
   genres: string[]
 }>()
 
+const { t } = useI18n()
+
 const primaryGenre = defineModel<string | null>('dropdown', { default: null })
 const selectedGenres = defineModel<string[]>('tags', { default: () => [] })
 
@@ -59,27 +61,27 @@ const renderTag: SelectRenderTag = ({ option, handleClose }) => {
 <template>
   <div class="flex flex-col gap-4">
     <div class="flex flex-col gap-1">
-      <span class="text-sm">Primary Genre (optional)</span>
+      <span class="text-sm">{{ t('genreSelector.primaryGenreLabel') }}</span>
       <NSelect
         v-model:value="primaryGenre"
         clearable
         :options="options"
-        placeholder="Select a genre"
+        :placeholder="t('genreSelector.primaryGenrePlaceholder')"
       />
     </div>
     <div class="flex flex-col gap-1">
-      <span class="text-sm">Selected Genres</span>
+      <span class="text-sm">{{ t('genreSelector.selectedGenresLabel') }}</span>
       <NSelect
         :value="selectedGenres"
         multiple
         :options="options"
         :render-tag="renderTag"
         :status="hasError ? 'error' : undefined"
-        placeholder="Select genres"
+        :placeholder="t('genreSelector.selectedGenresPlaceholder')"
         @update:value="handleUpdateSelectedGenres"
       />
       <span v-if="hasError" class="text-xs text-red-500">
-        At least one genre must be selected.
+        {{ t('genreSelector.genreRequired') }}
       </span>
     </div>
   </div>
