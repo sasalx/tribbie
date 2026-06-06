@@ -22,6 +22,7 @@ const heroData: MediaHeroSectionType = {
   title_native: '',
   anilist_url: result.meta.anilist_url,
 }
+const primaryGenreWeight = result.meta.primary_genre_weight
 
 const notification = useNotification()
 const { addEntry } = useHistory()
@@ -85,6 +86,9 @@ const columns: DataTableColumns<ResultDimension> = [
           appliedMultiplier: row.applied_multiplier,
           finalWeight: row.final_weight,
           effectiveWeightSum: result.meta.effective_weight_sum,
+          primaryGenreWeight,
+          primaryGenreMultiplier: row.primary_genre_multiplier ?? 0,
+          secondaryGenresMultiplier: row.secondary_genres_multiplier ?? 0,
         }),
   },
   { title: 'Contribution to Final Score', key: 'contribution', align: 'center', titleAlign: 'center', render: row => row.skipped ? '—' : beautifyNumber(row.contribution, 2) },

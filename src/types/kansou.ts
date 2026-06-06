@@ -30,6 +30,8 @@ export interface ResultDimension {
   bias_resistant: boolean
   weight_override: boolean
   skipped: boolean
+  primary_genre_multiplier?: number
+  secondary_genres_multiplier?: number
 }
 
 export interface ScoreResultMeta {
