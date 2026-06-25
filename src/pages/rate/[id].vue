@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import type { MediaResponse } from '~/types/anilist'
-import type { DimensionsResponse, GenerateScoreBody, ScoreResultResponse } from '~/types/kansou'
+import type { DimensionsResponse, GenerateScoreBody, ScoreResultResponse, WeightsRequestBody } from '~/types/kansou'
+import { useI18n } from 'vue-i18n'
 import { api } from '~/api/client'
+import WeightDetail from '~/components/WeightDetail.vue'
+import { useLiveWeights } from '~/composables/useLiveWeights'
 import { decimalToPercentage } from '~/utils/stringUtils'
+import { fromWeightsDimension } from '~/utils/weightBreakdown'
 
 const { t } = useI18n()
 
@@ -26,6 +30,31 @@ const canSubmit = computed(() =>
   selectedGenres.value.length > 0
   && Object.values(fields.value).every(field => field.skipped || field.value !== null),
 )
+
+const { weights } = useLiveWeights((): WeightsRequestBody | null => {
+  if (!media.value) {
+    return null
+  }
+
+  return {
+    media_id: media.value.id,
+    primary_genre: primaryGenre.value ?? '',
+    selected_genres: selectedGenres.value,
+    skipped_dimensions: Object.fromEntries(
+      Object.entries(fields.value).map(([key, field]) => [key, field.skipped]),
+    ),
+  }
+})
+
+const breakdownByKey = computed(() => {
+  if (!weights.value) {
+    return new Map()
+  }
+  return new Map(weights.value.dimensions.map(dim => [
+    dim.key,
+    fromWeightsDimension(dim, weights.value!.primary_genre_weight, weights.value!.effective_weight_sum),
+  ]))
+})
 
 onMounted(async () => {
   const [dimensionsData, mediaData] = await Promise.all([
@@ -139,7 +168,13 @@ async function handleSubmit() {
                       :placeholder="t('rate.inputPlaceholder')"
                     />
                     <NInputGroupLabel class="w-[calc(3ch+2rem)] text-center">
-                      {{ decimalToPercentage(dimension.weight) }}
+                      <WeightDetail
+                        v-if="breakdownByKey.get(dimension.key)"
+                        :label="dimension.label"
+                        :breakdown="breakdownByKey.get(dimension.key)!"
+                        should-change-colour
+                      />
+                      <span v-else>{{ decimalToPercentage(dimension.weight) }}</span>
                     </NInputGroupLabel>
                   </NInputGroup>
                   <NCheckbox
