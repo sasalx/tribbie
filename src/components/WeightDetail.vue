@@ -31,7 +31,7 @@ const compareColorClass = computed(() => {
   <span class="relative z-1 cursor-pointer underline decoration-dashed underline-offset-2" :class="compareColorClass" @click="show = true">
     {{ decimalToPercentage(props.breakdown.finalWeight) }}
   </span>
-  <NModal v-model:show="show" preset="card" :title="`${props.label} — Weight Breakdown`" style="max-width: 600px">
+  <NModal v-model:show="show" to="#app-content" preset="card" :title="`${props.label} — Weight Breakdown`" style="max-width: 600px">
     <div class="flex flex-col gap-3 text-sm">
       <div class="flex justify-between">
         <span class="font-semibold opacity-60">{{ t('weightDetail.baseDimensionWeight') }}</span>

@@ -9,7 +9,7 @@ function renderIcon(icon: Component) {
 
 const router = useRouter()
 const route = useRoute()
-const collapsed = ref(false)
+const collapsed = ref(true)
 
 const menuOptions: MenuOption[] = [
   {
@@ -66,7 +66,7 @@ function handleMenuSelect(key: string) {
           />
         </NLayoutSider>
 
-        <NLayoutContent content-style="padding: 24px; height: 100%">
+        <NLayoutContent id="app-content" class="contain-layout" content-class="h-full">
           <RouterView />
         </NLayoutContent>
       </NLayout>
