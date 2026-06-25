@@ -6,6 +6,7 @@ import { useNotification } from 'naive-ui'
 import { api } from '~/api/client'
 import WeightDetail from '~/components/WeightDetail.vue'
 import { beautifyNumber, decimalToPercentage } from '~/utils/stringUtils'
+import { fromResultDimension } from '~/utils/weightBreakdown'
 
 const { t } = useI18n()
 
@@ -24,8 +25,6 @@ const heroData: MediaHeroSectionType = {
   title_native: '',
   anilist_url: result.meta.anilist_url,
 }
-const primaryGenreWeight = result.meta.primary_genre_weight
-
 const notification = useNotification()
 const { addEntry } = useHistory()
 const isPublishLoading = ref(false)
@@ -78,13 +77,7 @@ const columns: DataTableColumns<ResultDimension> = [
       ? '—'
       : h(WeightDetail, {
           label: row.label,
-          baseWeight: row.base_weight,
-          appliedMultiplier: row.applied_multiplier,
-          finalWeight: row.final_weight,
-          effectiveWeightSum: result.meta.effective_weight_sum,
-          primaryGenreWeight,
-          primaryGenreMultiplier: row.primary_genre_multiplier ?? 0,
-          secondaryGenresMultiplier: row.secondary_genres_multiplier ?? 0,
+          breakdown: fromResultDimension(row, result.meta),
         }),
   },
   {
