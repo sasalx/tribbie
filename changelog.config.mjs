@@ -1,0 +1,12 @@
+import preset from 'conventional-changelog-conventionalcommits'
+
+export default preset({
+  types: [
+    { type: 'feat', section: 'Features' },
+    { type: 'fix', section: 'Bug Fixes' },
+    { type: 'chore', section: 'Chores' },
+    { type: 'refactor', section: 'Refactors' },
+    { type: 'docs', section: 'Documentation' },
+    { type: 'perf', section: 'Performance' },
+  ],
+})

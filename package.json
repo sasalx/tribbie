@@ -2,14 +2,15 @@
   "name": "tribbie",
   "type": "module",
   "version": "0.1.0",
-  "private": true,
+  "release-name": "Busy Day",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "release": "node release.mjs"
   },
   "dependencies": {
     "@vicons/ionicons5": "0.13.0",
@@ -24,6 +25,8 @@
     "@vue/eslint-config-prettier": "10.2.0",
     "@vue/eslint-config-typescript": "14.7.0",
     "@vue/tsconfig": "0.9.0",
+    "conventional-changelog": "8.0.0",
+    "conventional-changelog-conventionalcommits": "10.2.0",
     "eslint": "10.1.0",
     "eslint-plugin-format": "2.0.1",
     "eslint-plugin-vue": "10.8.0",

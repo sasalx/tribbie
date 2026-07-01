@@ -13,11 +13,9 @@ declare module 'vue' {
   export interface GlobalComponents {
     BannerImage: typeof import('./src/components/BannerImage.vue')['default']
     GenreSelector: typeof import('./src/components/GenreSelector.vue')['default']
-    HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     MediaCard: typeof import('./src/components/MediaCard.vue')['default']
     MediaHeroSection: typeof import('./src/components/MediaHeroSection.vue')['default']
     NButton: typeof import('naive-ui')['NButton']
-    NButtonGroup: typeof import('naive-ui')['NButtonGroup']
     NCard: typeof import('naive-ui')['NCard']
     NCheckbox: typeof import('naive-ui')['NCheckbox']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
