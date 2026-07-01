@@ -32,7 +32,7 @@ export default {
     finalScore: 'Final Score',
     addNotes: 'Add Notes',
     addNotesDesc: 'Send score table data as notes in Anilist',
-    publishButton: 'Send to Aha\'s Record',
+    publishButton: 'Send to Aha\'s Record!',
     publishSuccess: 'Success',
     publishSuccessDesc: 'Your score has been sent to AniList.',
     skipped: 'Skipped',
@@ -78,6 +78,8 @@ export default {
     submitButton: 'Send via Tribbie!',
   },
   notFound: 'Not Found',
+  notFoundDesc: 'Tribbie is lost as much as you.',
+  notFoundButton: 'Go Home',
   genreSelector: {
     primaryGenreLabel: 'Primary Genre (optional)',
     primaryGenrePlaceholder: 'Select a genre',
