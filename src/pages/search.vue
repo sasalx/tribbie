@@ -48,7 +48,7 @@ if (query.value) {
 </script>
 
 <template>
-  <div class="flex flex-col h-full overflow-hidden">
+  <div class="flex flex-col h-full overflow-hidden px-4">
     <div
       class="flex flex-col items-center gap-6 transition-all duration-500 ease-in-out"
       :class="hasResults ? 'pt-8' : 'pt-[28vh]'"

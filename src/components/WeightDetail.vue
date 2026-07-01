@@ -30,7 +30,7 @@ const compareColorClass = computed(() => {
 
 <template>
   <span class="relative z-1 cursor-pointer underline decoration-dashed underline-offset-2" :class="compareColorClass" @click="show = true">
-    {{ props.displayWeight }}
+    {{ props.breakdown.finalWeight === 0 ? 'N/A' : props.displayWeight }}
   </span>
   <NModal v-model:show="show" to="#app-content" preset="card" :title="`${props.label} — Weight Breakdown`" style="max-width: 600px">
     <div class="flex flex-col gap-3 text-sm">
