@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { api } from '~/api/client'
 import WeightDetail from '~/components/WeightDetail.vue'
 import { useLiveWeights } from '~/composables/useLiveWeights'
-import { decimalToPercentage, hamiltonPercentages } from '~/utils/stringUtils'
+import { hamiltonPercentages } from '~/utils/stringUtils'
 import { fromWeightsDimension } from '~/utils/weightBreakdown'
 
 const { t } = useI18n()
@@ -60,9 +60,9 @@ const breakdownByKey = computed(() => {
   if (!weights.value) {
     return new Map()
   }
-  return new Map(weights.value.dimensions.map(dim => [
-    dim.key,
-    fromWeightsDimension(dim, weights.value!.primary_genre_weight, weights.value!.effective_weight_sum),
+  return new Map(weights.value.dimensions.map(dimension => [
+    dimension.key,
+    fromWeightsDimension(dimension, weights.value!.primary_genre_weight, weights.value!.effective_weight_sum),
   ]))
 })
 
@@ -73,13 +73,18 @@ const hamiltonWeightByKey = computed(() => {
     const percentages = hamiltonPercentages(liveBreakdownEntries.map(([, breakdown]) => breakdown.finalWeight))
     return new Map(liveBreakdownEntries.map(([key], i) => [key, percentages[i]]))
   }
-  if (!dimensions.value)
+
+  if (!dimensions.value) {
     return new Map<string, string>()
+  }
+
   const staticDimensions = dimensions.value.dimensions
-  const percentages = hamiltonPercentages(staticDimensions.map(d => d.weight))
-  return new Map(staticDimensions.map((d, i) => [d.key, percentages[i]]))
+  const percentages = hamiltonPercentages(staticDimensions.map(dimension => dimension.weight))
+
+  return new Map(staticDimensions.map((dimension, index) => [dimension.key, percentages[index]]))
 })
 
+// Submit logic
 const canSubmit = computed(() =>
   selectedGenres.value.length > 0
   && Object.values(fields.value).every(field => field.skipped || field.value !== null),
@@ -189,7 +194,7 @@ async function handleSubmit() {
                         :display-weight="hamiltonWeightByKey.get(dimension.key)!"
                         should-change-colour
                       />
-                      <span v-else>{{ hamiltonWeightByKey.get(dimension.key) ?? decimalToPercentage(dimension.weight) }}</span>
+                      <NSpin v-else :size="14" />
                     </NInputGroupLabel>
                   </NInputGroup>
                   <NCheckbox
