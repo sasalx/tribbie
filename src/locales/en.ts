@@ -57,14 +57,9 @@ export default {
     },
     notes: {
       finalScore: 'Final Score: {score}/10',
-      effectiveWeightSum: 'Effective Weight Sum: {sum}',
       dimensionSkipped: '{label}: Skipped',
-      dimensionScore: '{label}: {score}/10',
-      baseWeight: ' ├─ Base Weight: {value}',
-      genreMultiplier: ' ├─ Genre Multiplier: × {value}',
-      effectiveWeight: ' ├─ Effective Weight: {value}',
-      finalWeight: ' ├─ Final Weight: {value}',
-      contribution: ' └─ Contribution: {value}',
+      dimension: '{label}: {score}/10 (base {baseWeight}, final {finalWeight}, contrib {contribution})',
+      footer: 'Generated with [Scorekeeper](https://github.com/buttokun/scorekeeper)',
     },
   },
   history: {

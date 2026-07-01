@@ -79,7 +79,6 @@ const columns: DataTableColumns<ResultDimension> = [
 const scoreTableAsNotes = ref((() => {
   const lines: string[] = [
     t('result.notes.finalScore', { score: beautifyNumber(result.final_score, 1) }),
-    t('result.notes.effectiveWeightSum', { sum: beautifyNumber(result.meta.effective_weight_sum) }),
     '',
   ]
 
@@ -88,14 +87,17 @@ const scoreTableAsNotes = ref((() => {
       lines.push(t('result.notes.dimensionSkipped', { label: dim.label }))
     }
     else {
-      lines.push(t('result.notes.dimensionScore', { label: dim.label, score: dim.score }))
-      lines.push(t('result.notes.baseWeight', { value: decimalToPercentage(dim.base_weight) }))
-      lines.push(t('result.notes.genreMultiplier', { value: beautifyNumber(dim.applied_multiplier) }))
-      lines.push(t('result.notes.effectiveWeight', { value: beautifyNumber(dim.base_weight * dim.applied_multiplier) }))
-      lines.push(t('result.notes.finalWeight', { value: decimalToPercentage(dim.final_weight) }))
-      lines.push(t('result.notes.contribution', { value: beautifyNumber(dim.contribution, 2) }))
+      lines.push(t('result.notes.dimension', {
+        label: dim.label,
+        score: dim.score,
+        baseWeight: decimalToPercentage(dim.base_weight),
+        finalWeight: decimalToPercentage(dim.final_weight),
+        contribution: beautifyNumber(dim.contribution, 2),
+      }))
     }
   })
+
+  lines.push('', t('result.notes.footer'))
 
   return lines.join('\n')
 })())
