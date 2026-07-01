@@ -32,14 +32,11 @@ Create a `.env` file in the project root with the API base URL Tribbie should ta
 VITE_API_BASE_URL=
 ```
 
-### Other scripts
+## What I Learned
 
-```bash
-pnpm build      # type-check and build for production
-pnpm preview    # preview the production build locally
-pnpm lint       # lint the project
-pnpm lint:fix   # lint and auto-fix
-```
+- It is never a good idea to use an opinionated eslint rules of someone else. Some of the rules are really baffling antfu.
+- Naive UI is solid and helps a lot to build an app. That said, just like any other ui lib, it is better to start from zero if you value flexibility over speed.
+- Tailwind or in my case UnoCSS is not helpful in a solo project. I might even refactor this out in the future.
 
 ## License
 
