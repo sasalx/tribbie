@@ -16,3 +16,25 @@ export function displayAltMediaTitle(titleEnglish?: string, titleNative?: string
   }
   return titleEnglish || titleNative || ''
 }
+
+export function hamiltonPercentages(values: number[], decimals = 1): string[] {
+  if (values.length === 0) {
+    return []
+  }
+
+  const scale = 10 ** decimals
+  const total = 100 * scale
+  const raw = values.map(v => v * total)
+  const floors = raw.map(v => Math.floor(v))
+  const remainder = total - floors.reduce((a, b) => a + b, 0)
+
+  const order = raw
+    .map((v, i) => ({ frac: v - floors[i], i }))
+    .sort((a, b) => b.frac - a.frac)
+
+  const result = [...floors]
+
+  for (let k = 0; k < remainder; k++) result[order[k].i]++
+
+  return result.map(v => `${v / scale}%`)
+}

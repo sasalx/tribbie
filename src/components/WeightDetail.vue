@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import type { WeightBreakdown } from '~/utils/weightBreakdown'
 import { useI18n } from 'vue-i18n'
-import { beautifyNumber, decimalToPercentage } from '~/utils/stringUtils'
+import { beautifyNumber } from '~/utils/stringUtils'
 
 const props = defineProps<{
   label: string
   breakdown: WeightBreakdown
   shouldChangeColour?: boolean
+  displayWeight: string
 }>()
 
 const { t } = useI18n()
@@ -29,7 +30,7 @@ const compareColorClass = computed(() => {
 
 <template>
   <span class="relative z-1 cursor-pointer underline decoration-dashed underline-offset-2" :class="compareColorClass" @click="show = true">
-    {{ decimalToPercentage(props.breakdown.finalWeight) }}
+    {{ props.displayWeight }}
   </span>
   <NModal v-model:show="show" to="#app-content" preset="card" :title="`${props.label} — Weight Breakdown`" style="max-width: 600px">
     <div class="flex flex-col gap-3 text-sm">

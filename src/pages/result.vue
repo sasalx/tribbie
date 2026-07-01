@@ -5,7 +5,7 @@ import type { MediaHeroSectionType } from '~/types/tribbie'
 import { useNotification } from 'naive-ui'
 import { api } from '~/api/client'
 import WeightDetail from '~/components/WeightDetail.vue'
-import { beautifyNumber, decimalToPercentage } from '~/utils/stringUtils'
+import { beautifyNumber, decimalToPercentage, hamiltonPercentages } from '~/utils/stringUtils'
 import { fromResultDimension } from '~/utils/weightBreakdown'
 
 const { t } = useI18n()
@@ -39,25 +39,11 @@ const scoreText = computed(() => {
   return t(`result.scoreTexts.${Math.round(result.final_score)}`)
 })
 
-const scoreColor = computed(() => {
-  const score = result.final_score
-
-  if (score === 10) {
-    return '#63e2b7' // green
-  }
-  else if (score >= 8) {
-    return '#a855f7' // purple
-  }
-  else if (score >= 6) {
-    return '#3b82f6' // blue
-  }
-  else if (score >= 4) {
-    return '#eab308' // yellow
-  }
-  else {
-    return '#ef4444' // red
-  }
-})
+const activeDimensions = result.breakdown.filter(d => !d.skipped)
+const hamiltonWeightByKey = new Map(
+  hamiltonPercentages(activeDimensions.map(d => d.final_weight))
+    .map((pct, i) => [activeDimensions[i].key, pct]),
+)
 
 const columns: DataTableColumns<ResultDimension> = [
   { title: t('result.columns.dimension'), key: 'label' },
@@ -78,6 +64,7 @@ const columns: DataTableColumns<ResultDimension> = [
       : h(WeightDetail, {
           label: row.label,
           breakdown: fromResultDimension(row, result.meta),
+          displayWeight: hamiltonWeightByKey.get(row.key)!,
         }),
   },
   {
@@ -113,6 +100,16 @@ const scoreTableAsNotes = ref((() => {
   return lines.join('\n')
 })())
 
+function scoreToColor(finalScore: number): string {
+  switch (true) {
+    case finalScore === 10: return '#63e2b7' // green
+    case finalScore >= 8: return '#a855f7' // purple
+    case finalScore >= 6: return '#3b82f6' // blue
+    case finalScore >= 4: return '#eab308' // yellow
+    default: return '#ef4444' // red
+  }
+}
+
 async function handlePublish() {
   isPublishLoading.value = true
 
@@ -143,7 +140,7 @@ async function handlePublish() {
                 type="circle"
                 :percentage="result.final_score * 10"
                 :show-indicator="true"
-                :color="scoreColor"
+                :color="scoreToColor(result.final_score)"
                 gap-position="bottom"
               >
                 <span class="text-xl font-bold">{{ beautifyNumber(result.final_score, 1) }}</span>

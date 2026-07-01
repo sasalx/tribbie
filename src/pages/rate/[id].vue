@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { api } from '~/api/client'
 import WeightDetail from '~/components/WeightDetail.vue'
 import { useLiveWeights } from '~/composables/useLiveWeights'
-import { decimalToPercentage } from '~/utils/stringUtils'
+import { decimalToPercentage, hamiltonPercentages } from '~/utils/stringUtils'
 import { fromWeightsDimension } from '~/utils/weightBreakdown'
 
 const { t } = useI18n()
@@ -26,10 +26,20 @@ const allowSkip = ref(false)
 const router = useRouter()
 const { id } = useRoute('/rate/[id]').params
 
-const canSubmit = computed(() =>
-  selectedGenres.value.length > 0
-  && Object.values(fields.value).every(field => field.skipped || field.value !== null),
-)
+onMounted(async () => {
+  const [dimensionsData, mediaData] = await Promise.all([
+    api.get<DimensionsResponse>('/dimensions'),
+    api.get<MediaResponse>(`/media/${id}`),
+  ])
+
+  dimensions.value = dimensionsData
+  media.value = mediaData
+  fields.value = Object.fromEntries(
+    dimensionsData.dimensions.map(d => [d.key, { value: null, skipped: false }]),
+  )
+
+  loading.value = false
+})
 
 const { weights } = useLiveWeights((): WeightsRequestBody | null => {
   if (!media.value) {
@@ -56,20 +66,24 @@ const breakdownByKey = computed(() => {
   ]))
 })
 
-onMounted(async () => {
-  const [dimensionsData, mediaData] = await Promise.all([
-    api.get<DimensionsResponse>('/dimensions'),
-    api.get<MediaResponse>(`/media/${id}`),
-  ])
+const hamiltonWeightByKey = computed(() => {
+  const liveBreakdownEntries = [...breakdownByKey.value.entries()]
 
-  dimensions.value = dimensionsData
-  media.value = mediaData
-  fields.value = Object.fromEntries(
-    dimensionsData.dimensions.map(d => [d.key, { value: null, skipped: false }]),
-  )
-
-  loading.value = false
+  if (liveBreakdownEntries.length > 0) {
+    const percentages = hamiltonPercentages(liveBreakdownEntries.map(([, breakdown]) => breakdown.finalWeight))
+    return new Map(liveBreakdownEntries.map(([key], i) => [key, percentages[i]]))
+  }
+  if (!dimensions.value)
+    return new Map<string, string>()
+  const staticDimensions = dimensions.value.dimensions
+  const percentages = hamiltonPercentages(staticDimensions.map(d => d.weight))
+  return new Map(staticDimensions.map((d, i) => [d.key, percentages[i]]))
 })
+
+const canSubmit = computed(() =>
+  selectedGenres.value.length > 0
+  && Object.values(fields.value).every(field => field.skipped || field.value !== null),
+)
 
 async function handleSubmit() {
   if (!canSubmit.value) {
@@ -172,9 +186,10 @@ async function handleSubmit() {
                         v-if="breakdownByKey.get(dimension.key)"
                         :label="dimension.label"
                         :breakdown="breakdownByKey.get(dimension.key)!"
+                        :display-weight="hamiltonWeightByKey.get(dimension.key)!"
                         should-change-colour
                       />
-                      <span v-else>{{ decimalToPercentage(dimension.weight) }}</span>
+                      <span v-else>{{ hamiltonWeightByKey.get(dimension.key) ?? decimalToPercentage(dimension.weight) }}</span>
                     </NInputGroupLabel>
                   </NInputGroup>
                   <NCheckbox
