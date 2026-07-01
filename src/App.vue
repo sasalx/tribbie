@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { MenuOption } from 'naive-ui'
-import { HomeOutline, SearchOutline, TimeOutline } from '@vicons/ionicons5'
+import { HomeOutline, SearchOutline, SettingsOutline, TimeOutline } from '@vicons/ionicons5'
 import { darkTheme, NIcon } from 'naive-ui'
 
 function renderIcon(icon: Component) {
@@ -26,6 +26,11 @@ const menuOptions: MenuOption[] = [
     label: 'History',
     key: '/history',
     icon: renderIcon(TimeOutline),
+  },
+  {
+    label: 'Settings',
+    key: '/settings',
+    icon: renderIcon(SettingsOutline),
   },
 ]
 

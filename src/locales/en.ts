@@ -82,4 +82,8 @@ export default {
     selectedGenresPlaceholder: 'Select genres',
     genreRequired: 'At least one genre must be selected.',
   },
+  settings: {
+    title: 'Settings',
+    empty: 'No settings yet.',
+  },
 }
