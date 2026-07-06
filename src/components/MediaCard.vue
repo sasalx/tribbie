@@ -18,33 +18,33 @@ function handleClick() {
 </script>
 
 <template>
-  <NCard hoverable class="cursor-pointer" @click="handleClick">
-    <div class="flex gap-4">
+  <NCard hoverable class="media-card" @click="handleClick">
+    <div class="media-card__content">
       <NImage
         :src="data.cover_image"
         :alt="data.title_romaji"
         :width="cardImageSize.width"
         :height="cardImageSize.height"
         object-fit="cover"
-        class="rounded"
+        class="media-card__cover"
         @click.stop
       />
-      <div class="flex flex-col gap-1">
-        <h2 class="text-base font-semibold leading-tight">
+      <div class="media-card__info">
+        <h2 class="media-card__title">
           {{ data.title_romaji }}
         </h2>
-        <span class="text-xs opacity-60">{{ displayAltMediaTitle(data.title_english, data.title_native) }}</span>
+        <span class="media-card__subtitle">{{ displayAltMediaTitle(data.title_english, data.title_native) }}</span>
 
-        <div class="flex flex-col gap-1 mt-1">
-          <span class="text-xs opacity-50">Type</span>
-          <NTag :type="data.media_type === 'ANIME' ? 'info' : 'warning'" :bordered="false" size="small" class="self-start">
+        <div class="media-card__meta">
+          <span class="media-card__meta-label">Type</span>
+          <NTag :type="data.media_type === 'ANIME' ? 'info' : 'warning'" :bordered="false" size="small" class="media-card__type-tag">
             {{ toFirstLetterCapitalString(data.media_type) }}
           </NTag>
         </div>
 
-        <div class="flex flex-col gap-1 mt-1">
-          <span class="text-xs opacity-50">Genres</span>
-          <div class="flex flex-wrap gap-1">
+        <div class="media-card__meta">
+          <span class="media-card__meta-label">Genres</span>
+          <div class="media-card__genres">
             <NTag v-for="genre in data.genres" :key="genre" :bordered="false" size="small">
               {{ genre }}
             </NTag>
@@ -54,3 +54,57 @@ function handleClick() {
     </div>
   </NCard>
 </template>
+
+<style lang="scss" scoped>
+.media-card {
+  cursor: pointer;
+
+  &__content {
+    display: flex;
+    gap: var(--space-4);
+  }
+
+  &__cover {
+    border-radius: var(--radius-sm);
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  &__title {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  &__subtitle {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin-top: var(--space-1);
+  }
+
+  &__meta-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-subtle);
+  }
+
+  &__type-tag {
+    align-self: flex-start;
+  }
+
+  &__genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+}
+</style>

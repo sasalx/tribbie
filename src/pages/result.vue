@@ -52,7 +52,7 @@ const columns: DataTableColumns<ResultDimension> = [
     key: 'score',
     align: 'center',
     titleAlign: 'center',
-    render: row => row.skipped ? h('span', { class: 'text-red-500' }, t('result.skipped')) : String(row.score),
+    render: row => row.skipped ? h('span', { class: 'text-danger' }, t('result.skipped')) : String(row.score),
   },
   {
     title: t('result.columns.weight'),
@@ -127,16 +127,16 @@ async function handlePublish() {
 </script>
 
 <template>
-  <div class="min-h-full">
+  <div class="result">
     <BannerImage :src="bannerImage" />
 
-    <div class="max-w-3xl mx-auto px-4 -mt-8 pb-12 relative z-10">
+    <div class="result__card-wrapper">
       <NCard bordered>
-        <div class="flex flex-col gap-4">
+        <div class="result__card-content">
           <MediaHeroSection :data="heroData" />
           <NDivider />
-          <div class="flex flex-col items-center gap-2">
-            <span class="text-sm opacity-60">{{ t('result.finalScore') }}</span>
+          <div class="result__score-section">
+            <span class="result__score-label">{{ t('result.finalScore') }}</span>
             <div :class="result.final_score === 10 ? 'elation-glow' : ''">
               <NProgress
                 type="circle"
@@ -145,10 +145,10 @@ async function handlePublish() {
                 :color="scoreToColor(result.final_score)"
                 gap-position="bottom"
               >
-                <span class="text-xl font-bold">{{ beautifyNumber(result.final_score, 1) }}</span>
+                <span class="result__score-value">{{ beautifyNumber(result.final_score, 1) }}</span>
               </NProgress>
             </div>
-            <span v-if="scoreText" class="text-sm opacity-60 text-center">{{ scoreText }}</span>
+            <span v-if="scoreText" class="result__score-text">{{ scoreText }}</span>
           </div>
           <NDivider />
           <NDataTable
@@ -157,12 +157,12 @@ async function handlePublish() {
             :bordered="false"
             size="small"
           />
-          <div class="flex flex-col gap-2">
-            <div class="flex items-center gap-2">
+          <div class="result__notes-section">
+            <div class="result__notes-toggle">
               <NSwitch v-model:value="addNotes" />
-              <div class="flex flex-col">
+              <div class="result__notes-toggle-labels">
                 <span>{{ t('result.addNotes') }}</span>
-                <span class="text-xs opacity-50">{{ t('result.addNotesDesc') }}</span>
+                <span class="result__notes-desc">{{ t('result.addNotesDesc') }}</span>
               </div>
             </div>
             <NInput
@@ -172,7 +172,7 @@ async function handlePublish() {
               :autosize="{ minRows: 4 }"
             />
           </div>
-          <div class="flex justify-center">
+          <div class="result__publish-section">
             <NButton type="primary" :loading="isPublishLoading" @click="handlePublish">
               {{ t('result.publishButton') }}
             </NButton>
@@ -183,19 +183,89 @@ async function handlePublish() {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+.result {
+  min-height: 100%;
+
+  &__card-wrapper {
+    max-width: var(--layout-max-width);
+    margin: 0 auto;
+    padding: 0 var(--layout-padding);
+    margin-top: calc(-1 * var(--space-8));
+    padding-bottom: var(--space-12);
+    position: relative;
+    z-index: var(--z-overlay);
+  }
+
+  &__card-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  &__score-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  &__score-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  &__score-value {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+  }
+
+  &__score-text {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    text-align: center;
+  }
+
+  &__notes-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  &__notes-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  &__notes-toggle-labels {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__notes-desc {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-subtle);
+  }
+
+  &__publish-section {
+    display: flex;
+    justify-content: center;
+  }
+}
+
 @keyframes elation-pulse {
   0%,
   100% {
-    box-shadow: 0 0 12px 4px #63e2b7;
+    box-shadow: 0 0 12px 4px var(--color-score-perfect);
   }
   50% {
-    box-shadow: 0 0 24px 10px #06b6d4;
+    box-shadow: 0 0 24px 10px var(--color-brand-alt);
   }
 }
 
 .elation-glow {
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   animation: elation-pulse 2s ease-in-out infinite;
 }
 </style>

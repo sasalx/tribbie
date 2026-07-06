@@ -42,7 +42,7 @@ function handleMenuSelect(key: string) {
 <template>
   <NConfigProvider :theme="darkTheme">
     <NNotificationProvider>
-      <NLayout has-sider class="h-screen">
+      <NLayout class="app-layout" has-sider>
         <NLayoutSider
           v-model:collapsed="collapsed"
           bordered
@@ -51,14 +51,14 @@ function handleMenuSelect(key: string) {
           :width="220"
           show-trigger
         >
-          <div class="flex items-center gap-2 px-3 py-2 overflow-hidden">
+          <div class="app-sidebar__header">
             <img
               src="/tribbie.png"
               alt="Tribbie"
-              class="w-10 h-10 rounded-full object-cover shrink-0"
+              class="app-sidebar__logo"
             >
             <Transition name="title-fade">
-              <span v-if="!collapsed" class="text-sm font-semibold truncate tribbie-title">
+              <span v-if="!collapsed" class="app-sidebar__title tribbie-title">
                 Tribbie's Scorekeeper
               </span>
             </Transition>
@@ -71,7 +71,7 @@ function handleMenuSelect(key: string) {
           />
         </NLayoutSider>
 
-        <NLayoutContent id="app-content" class="contain-layout" content-class="h-full">
+        <NLayoutContent id="app-content" class="contain-layout" content-class="app-layout__content">
           <RouterView />
         </NLayoutContent>
       </NLayout>
@@ -79,7 +79,37 @@ function handleMenuSelect(key: string) {
   </NConfigProvider>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+.app-layout {
+  height: 100vh;
+}
+
+.app-sidebar {
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    overflow: hidden;
+  }
+
+  &__logo {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
 .tribbie-title {
   background: linear-gradient(90deg, #63e2b7, #06b6d4);
   -webkit-background-clip: text;

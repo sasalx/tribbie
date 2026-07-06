@@ -59,9 +59,9 @@ const renderTag: SelectRenderTag = ({ option, handleClose }) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
-    <div class="flex flex-col gap-1">
-      <span class="text-sm">{{ t('genreSelector.primaryGenreLabel') }}</span>
+  <div class="genre-selector">
+    <div class="genre-selector__field">
+      <span class="genre-selector__label">{{ t('genreSelector.primaryGenreLabel') }}</span>
       <NSelect
         v-model:value="primaryGenre"
         clearable
@@ -69,8 +69,8 @@ const renderTag: SelectRenderTag = ({ option, handleClose }) => {
         :placeholder="t('genreSelector.primaryGenrePlaceholder')"
       />
     </div>
-    <div class="flex flex-col gap-1">
-      <span class="text-sm">{{ t('genreSelector.selectedGenresLabel') }}</span>
+    <div class="genre-selector__field">
+      <span class="genre-selector__label">{{ t('genreSelector.selectedGenresLabel') }}</span>
       <NSelect
         :value="selectedGenres"
         multiple
@@ -80,9 +80,32 @@ const renderTag: SelectRenderTag = ({ option, handleClose }) => {
         :placeholder="t('genreSelector.selectedGenresPlaceholder')"
         @update:value="handleUpdateSelectedGenres"
       />
-      <span v-if="hasError" class="text-xs text-red-500">
+      <span v-if="hasError" class="genre-selector__error">
         {{ t('genreSelector.genreRequired') }}
       </span>
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.genre-selector {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  &__label {
+    font-size: var(--font-size-sm);
+  }
+
+  &__error {
+    font-size: var(--font-size-xs);
+    color: var(--color-danger);
+  }
+}
+</style>

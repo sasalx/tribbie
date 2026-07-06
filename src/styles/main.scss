@@ -1,0 +1,17 @@
+@use 'variables';
+@use 'reset';
+
+// Passed via NaiveUI content-class prop — cannot be scoped
+.app-layout__content {
+  height: 100%;
+}
+
+// Applied to NLayoutContent root via Vue attrs fallthrough
+.contain-layout {
+  contain: layout;
+}
+
+// Used in render functions (h()) where scoped styles can't reach
+.text-danger {
+  color: var(--color-danger);
+}

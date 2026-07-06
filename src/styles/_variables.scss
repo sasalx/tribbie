@@ -1,0 +1,55 @@
+:root {
+  // Brand
+  --color-brand: #63e2b7;
+  --color-brand-alt: #06b6d4;
+
+  // Score
+  --color-score-perfect: #63e2b7;
+  --color-score-great: #a855f7;
+  --color-score-good: #3b82f6;
+  --color-score-ok: #eab308;
+  --color-score-bad: #ef4444;
+
+  // Semantic
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
+
+  // Text
+  --color-text-muted: rgba(255, 255, 255, 0.6);
+  --color-text-subtle: rgba(255, 255, 255, 0.5);
+
+  // Spacing (multiples of 4px)
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  // Typography
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 30px;
+  --font-size-5xl: 48px;
+
+  // Radii
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  // Z-index
+  --z-above: 1;
+  --z-overlay: 10;
+
+  // Layout
+  --layout-max-width: 768px;
+  --layout-padding: var(--space-4);
+}

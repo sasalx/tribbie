@@ -41,7 +41,7 @@ onMounted(async () => {
   loading.value = false
 })
 
-const { weights } = useLiveWeights((): WeightsRequestBody | null => {
+const { weights, loading: weightsLoading } = useLiveWeights((): WeightsRequestBody | null => {
   if (!media.value) {
     return null
   }
@@ -118,34 +118,34 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div class="min-h-full">
+  <div class="rate">
     <BannerImage :src="loading ? undefined : media?.banner_image" />
 
-    <div class="max-w-3xl mx-auto px-4 -mt-12 pb-12 relative z-10">
+    <div class="rate__card-wrapper">
       <NCard bordered>
         <template v-if="loading">
-          <div class="flex flex-col gap-6">
-            <div class="flex gap-4">
+          <div class="rate__skeleton">
+            <div class="rate__skeleton-hero">
               <NSkeleton height="180px" width="120px" :sharp="false" />
-              <div class="flex flex-col gap-2 flex-1 pt-2">
+              <div class="rate__skeleton-hero-info">
                 <NSkeleton height="28px" width="60%" :sharp="false" />
                 <NSkeleton height="16px" width="40%" :sharp="false" />
               </div>
             </div>
-            <NDivider class="my-0" />
-            <div class="flex flex-col gap-4">
-              <div class="flex flex-col gap-2">
+            <NDivider class="rate__divider--flush" />
+            <div class="rate__skeleton-genres">
+              <div class="rate__skeleton-field">
                 <NSkeleton height="16px" width="120px" :sharp="false" />
                 <NSkeleton height="34px" :sharp="false" />
               </div>
-              <div class="flex flex-col gap-2">
+              <div class="rate__skeleton-field">
                 <NSkeleton height="16px" width="120px" :sharp="false" />
                 <NSkeleton height="34px" :sharp="false" />
               </div>
             </div>
-            <NDivider class="my-0" />
-            <div class="flex flex-col gap-4">
-              <div v-for="i in 4" :key="i" class="flex flex-col gap-2">
+            <NDivider class="rate__divider--flush" />
+            <div class="rate__skeleton-fields">
+              <div v-for="i in 4" :key="i" class="rate__skeleton-field">
                 <NSkeleton height="16px" width="30%" :sharp="false" />
                 <NSkeleton height="34px" :sharp="false" />
               </div>
@@ -155,7 +155,7 @@ async function handleSubmit() {
         </template>
 
         <template v-else>
-          <div class="flex flex-col">
+          <div class="rate__content">
             <MediaHeroSection :data="media!" />
             <NDivider />
             <GenreSelector
@@ -164,7 +164,7 @@ async function handleSubmit() {
               :genres="media!.genres"
             />
             <NDivider />
-            <div class="flex items-center gap-2 mb-4">
+            <div class="rate__skip-toggle">
               <NSwitch v-model:value="allowSkip" />
               <span>{{ t('rate.allowSkipping') }}</span>
             </div>
@@ -174,19 +174,19 @@ async function handleSubmit() {
                 :key="dimension.key"
                 :label="dimension.label"
               >
-                <div class="flex flex-col gap-1 w-full">
-                  <span class="text-xs opacity-60 pl-0.5">{{ dimension.description }}</span>
+                <div class="rate__field">
+                  <span class="rate__field-description">{{ dimension.description }}</span>
                   <NInputGroup>
                     <NInputNumber
                       v-model:value="fields[dimension.key].value"
-                      class="w-full"
+                      class="rate__field-input"
                       :min="0"
                       :max="10"
                       :step="0.5"
                       :disabled="fields[dimension.key].skipped"
                       :placeholder="t('rate.inputPlaceholder')"
                     />
-                    <NInputGroupLabel class="w-[calc(3ch+2rem)] text-center">
+                    <NInputGroupLabel class="rate__weight-label">
                       <WeightDetail
                         v-if="breakdownByKey.get(dimension.key)"
                         :label="dimension.label"
@@ -194,13 +194,13 @@ async function handleSubmit() {
                         :display-weight="hamiltonWeightByKey.get(dimension.key)!"
                         should-change-colour
                       />
-                      <NSpin v-else :size="14" />
+                      <NSpin v-else-if="weightsLoading" :size="14" />
                     </NInputGroupLabel>
                   </NInputGroup>
                   <NCheckbox
                     v-if="allowSkip"
                     v-model:checked="fields[dimension.key].skipped"
-                    class="mt-1"
+                    class="rate__field-checkbox"
                   >
                     {{ t('rate.skipCheckbox') }}
                   </NCheckbox>
@@ -216,3 +216,98 @@ async function handleSubmit() {
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.rate {
+  min-height: 100%;
+
+  &__card-wrapper {
+    max-width: var(--layout-max-width);
+    margin: 0 auto;
+    padding: 0 var(--layout-padding);
+    margin-top: calc(-1 * var(--space-12));
+    padding-bottom: var(--space-12);
+    position: relative;
+    z-index: var(--z-overlay);
+  }
+
+  &__skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  &__skeleton-hero {
+    display: flex;
+    gap: var(--space-4);
+  }
+
+  &__skeleton-hero-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+    padding-top: var(--space-2);
+  }
+
+  &__skeleton-genres {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  &__skeleton-fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  &__skeleton-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  &__divider--flush {
+    margin: 0;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__skip-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    width: 100%;
+  }
+
+  &__field-description {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    padding-left: 2px;
+  }
+
+  &__field-input {
+    width: 100%;
+  }
+
+  &__weight-label {
+    width: calc(3ch + 2rem);
+    text-align: center;
+  }
+
+  &__field-checkbox {
+    margin-top: var(--space-1);
+  }
+}
+</style>

@@ -4,27 +4,51 @@ const taglines = computed(() => tm('home.taglines') as string[])
 </script>
 
 <template>
-  <div class="flex items-center justify-center h-full gap-16">
-    <img src="/tribbie-home.jpg" alt="Tribbie" class="max-h-[70vh] object-contain rounded-xl">
-
-    <div class="flex flex-col gap-4">
-      <div v-for="word in taglines" :key="word" class="text-5xl font-bold">
-        <span class="gradient-text">{{ word }}</span>
+  <div class="home">
+    <img src="/tribbie-home.jpg" alt="Tribbie" class="home__image">
+    <div class="home__taglines">
+      <div v-for="word in taglines" :key="word" class="home__tagline">
+        <span class="home__tagline-text">{{ word }}</span>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped>
-.gradient-text {
-  display: inline-block;
-  background: linear-gradient(90deg, #63e2b7, #06b6d4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+<style lang="scss" scoped>
+.home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: var(--space-16);
 
-.gradient-text::first-letter {
-  font-size: 1.5em;
+  &__image {
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: var(--radius-lg);
+  }
+
+  &__taglines {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  &__tagline {
+    font-size: var(--font-size-5xl);
+    font-weight: 700;
+  }
+
+  &__tagline-text {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--color-brand), var(--color-brand-alt));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    &::first-letter {
+      font-size: 1.5em;
+    }
+  }
 }
 </style>

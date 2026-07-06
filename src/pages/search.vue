@@ -48,16 +48,13 @@ if (query.value) {
 </script>
 
 <template>
-  <div class="flex flex-col h-full overflow-hidden px-4">
-    <div
-      class="flex flex-col items-center gap-6 transition-all duration-500 ease-in-out"
-      :class="hasResults ? 'pt-8' : 'pt-[28vh]'"
-    >
-      <div class="flex flex-col items-center gap-1">
-        <h1 class="text-3xl font-semibold">
+  <div class="search">
+    <div class="search__header" :class="hasResults ? 'search__header--compact' : 'search__header--centered'">
+      <div class="search__title-group">
+        <h1 class="search__title">
           {{ t('search.title') }}
         </h1>
-        <p class="text-sm opacity-50">
+        <p class="search__subtitle">
           {{ t('search.subtitle') }}
         </p>
         <NRadioGroup :value="mediaType">
@@ -69,8 +66,7 @@ if (query.value) {
           </NRadioButton>
         </NRadioGroup>
       </div>
-
-      <div class="w-full max-w-2xl flex flex-col gap-2">
+      <div class="search__controls">
         <NInput
           v-model:value="query"
           :placeholder="t('search.inputPlaceholder')"
@@ -78,26 +74,113 @@ if (query.value) {
           :loading="loading"
           @keydown="handleKeydown"
         />
-        <div class="flex justify-end">
-          <NButton
-            type="primary"
-            :disabled="!query.trim()"
-            @click="handleSearch"
-          >
+        <div class="search__actions">
+          <NButton type="primary" :disabled="!query.trim()" @click="handleSearch">
             {{ t('search.searchButton') }}
           </NButton>
         </div>
       </div>
     </div>
 
-    <Transition
-      enter-active-class="transition-all duration-500 ease-in-out"
-      enter-from-class="opacity-0 translate-y-4"
-      enter-to-class="opacity-100 translate-y-0"
-    >
-      <div v-if="hasResults" class="mt-12 px-8 w-full self-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 overflow-y-auto flex-1 pb-6 content-start">
+    <Transition name="results-slide">
+      <div v-if="hasResults" class="search__results">
         <MediaCard v-for="result in results" :key="result.id" :data="result" />
       </div>
     </Transition>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.search {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  padding: 0 var(--space-4);
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+    transition: padding-top 0.5s ease-in-out;
+
+    &--centered {
+      padding-top: 28vh;
+    }
+
+    &--compact {
+      padding-top: var(--space-8);
+    }
+  }
+
+  &__title-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  &__title {
+    font-size: var(--font-size-3xl);
+    font-weight: 600;
+  }
+
+  &__subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-subtle);
+  }
+
+  &__controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    width: 100%;
+    max-width: 672px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__results {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+    margin-top: var(--space-12);
+    padding-bottom: var(--space-6);
+    overflow-y: auto;
+    flex: 1;
+    align-content: start;
+    align-self: center;
+    width: 100%;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (min-width: 1280px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+}
+
+.results-slide-enter-active {
+  transition: all 0.5s ease-in-out;
+}
+
+.results-slide-enter-from {
+  opacity: 0;
+  transform: translateY(var(--space-4));
+}
+
+.results-slide-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>

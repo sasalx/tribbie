@@ -36,7 +36,7 @@ VITE_API_BASE_URL=
 
 - It is never a good idea to use an opinionated eslint rules of someone else. Some of the rules are really baffling antfu.
 - Naive UI is solid and helps a lot to build an app. That said, just like any other ui lib, it is better to start from zero if you value flexibility over speed.
-- Tailwind or in my case UnoCSS is not helpful in a solo project. I might even refactor this out in the future.
+- Tailwind or in my case UnoCSS is not helpful in a solo project. I might even refactor this out in the future. (Removed o7)
 
 ## License
 

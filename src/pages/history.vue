@@ -27,12 +27,12 @@ function formatTime(time: number) {
 </script>
 
 <template>
-  <div class="max-w-3xl mx-auto flex flex-col gap-4">
-    <h1 class="text-2xl font-semibold">
+  <div class="history">
+    <h1 class="history__title">
       {{ t('history.title') }}
     </h1>
 
-    <div v-if="entries.length === 0" class="opacity-50 text-sm">
+    <div v-if="entries.length === 0" class="history__empty">
       {{ t('history.empty') }}
     </div>
 
@@ -42,22 +42,22 @@ function formatTime(time: number) {
         :key="entry.result.meta.media_id"
         :time="formatTime(entry.savedAt)"
       >
-        <NCard hoverable class="cursor-pointer" @click="handleClick(i)">
-          <div class="flex gap-4 items-center">
+        <NCard hoverable class="history__card" @click="handleClick(i)">
+          <div class="history__card-content">
             <NImage
               :src="entry.coverImage"
               :alt="entry.result.meta.title_romaji"
               width="60"
               height="90"
               object-fit="cover"
-              class="rounded shrink-0"
+              class="history__card-cover"
               preview-disabled
             />
-            <div class="flex flex-col gap-1 flex-1 min-w-0">
-              <span class="font-semibold truncate">{{ entry.result.meta.title_romaji }}</span>
-              <span class="text-xs opacity-50">{{ entry.result.meta.title_english }}</span>
+            <div class="history__card-info">
+              <span class="history__card-title">{{ entry.result.meta.title_romaji }}</span>
+              <span class="history__card-subtitle">{{ entry.result.meta.title_english }}</span>
             </div>
-            <span class="text-2xl font-bold shrink-0">
+            <span class="history__card-score">
               {{ beautifyNumber(entry.result.final_score, 1) }}
             </span>
           </div>
@@ -66,3 +66,64 @@ function formatTime(time: number) {
     </NTimeline>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.history {
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+
+  &__title {
+    font-size: var(--font-size-2xl);
+    font-weight: 600;
+  }
+
+  &__empty {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-subtle);
+  }
+
+  &__card {
+    cursor: pointer;
+  }
+
+  &__card-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  &__card-cover {
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+  }
+
+  &__card-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__card-title {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__card-subtitle {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-subtle);
+  }
+
+  &__card-score {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+}
+</style>
