@@ -26,11 +26,8 @@ const heroData: MediaHeroSectionType = {
   anilist_url: result.meta.anilist_url,
 }
 const notification = useNotification()
-const { addEntry } = useHistory()
 const isPublishLoading = ref(false)
 const addNotes = ref(false)
-
-addEntry({ result, coverImage: state.coverImage, bannerImage: state.bannerImage })
 
 const scoreText = computed(() => {
   if (beautifyNumber(result.final_score, 1) === '3.6') {
