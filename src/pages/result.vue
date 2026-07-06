@@ -5,7 +5,7 @@ import type { MediaHeroSectionType } from '~/types/tribbie'
 import { useNotification } from 'naive-ui'
 import { api } from '~/api/client'
 import WeightDetail from '~/components/WeightDetail.vue'
-import { beautifyNumber, decimalToPercentage, hamiltonPercentages } from '~/utils/stringUtils'
+import { beautifyNumber, decimalToPercentage, hamiltonPercentages, scoreTier } from '~/utils/stringUtils'
 import { fromResultDimension } from '~/utils/weightBreakdown'
 
 const { t } = useI18n()
@@ -99,16 +99,6 @@ const scoreTableAsNotes = ref((() => {
   return lines.join('\n')
 })())
 
-function scoreToColor(finalScore: number): string {
-  switch (true) {
-    case finalScore === 10: return '#63e2b7' // green
-    case finalScore >= 8: return '#a855f7' // purple
-    case finalScore >= 6: return '#3b82f6' // blue
-    case finalScore >= 4: return '#eab308' // yellow
-    default: return '#ef4444' // red
-  }
-}
-
 async function handlePublish() {
   isPublishLoading.value = true
 
@@ -139,7 +129,7 @@ async function handlePublish() {
                 type="circle"
                 :percentage="result.final_score * 10"
                 :show-indicator="true"
-                :color="scoreToColor(result.final_score)"
+                :color="`var(--color-score-${scoreTier(result.final_score)})`"
                 gap-position="bottom"
               >
                 <span class="result__score-value">{{ beautifyNumber(result.final_score, 1) }}</span>

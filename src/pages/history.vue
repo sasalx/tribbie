@@ -1,28 +1,34 @@
 <script setup lang="ts">
-import { useHistory } from '~/composables/useHistory'
-import { beautifyNumber } from '~/utils/stringUtils'
+import type { HistoryItem } from '~/types/kansou'
+import { EyeOffOutline, TrashOutline } from '@vicons/ionicons5'
+import { api } from '~/api/client'
+import { beautifyNumber, scoreTier } from '~/utils/stringUtils'
 
 const { t } = useI18n()
-const router = useRouter()
-const { entries } = useHistory()
 
-function handleClick(index: number) {
-  const entry = entries.value[index]
-  router.push({
-    path: '/result',
-    state: {
-      result: JSON.stringify(entry.result),
-      coverImage: entry.coverImage,
-      bannerImage: entry.bannerImage,
-    },
-  })
-}
+const historyEntries = ref<HistoryItem[]>([])
+const isLoading = ref(true)
 
-function formatTime(time: number) {
-  return new Date(time).toLocaleString(undefined, {
+onMounted(async () => {
+  historyEntries.value = await api.get<HistoryItem[]>('/v1/history')
+  isLoading.value = false
+})
+
+function formatTime(scoredAt: string) {
+  return new Date(scoredAt).toLocaleString(undefined, {
     dateStyle: 'medium',
     timeStyle: 'short',
   })
+}
+
+async function handleHide(scoreId: number) {
+  // await api.delete(`/v1/history/${scoreId}`)
+  historyEntries.value = historyEntries.value.filter(entry => entry.score_id !== scoreId)
+}
+
+async function handleDelete(scoreId: number) {
+  // await api.delete(`/v1/history/${scoreId}`)
+  historyEntries.value = historyEntries.value.filter(entry => entry.score_id !== scoreId)
 }
 </script>
 
@@ -32,36 +38,52 @@ function formatTime(time: number) {
       {{ t('history.title') }}
     </h1>
 
-    <div v-if="entries.length === 0" class="history__empty">
+    <NSpin v-if="isLoading" />
+
+    <div v-else-if="historyEntries.length === 0" class="history__empty">
       {{ t('history.empty') }}
     </div>
 
     <NTimeline v-else>
       <NTimelineItem
-        v-for="(entry, i) in entries"
-        :key="entry.result.meta.media_id"
-        :time="formatTime(entry.savedAt)"
+        v-for="entry in historyEntries"
+        :key="entry.score_id"
       >
-        <NCard hoverable class="history__card" @click="handleClick(i)">
-          <div class="history__card-content">
-            <NImage
-              :src="entry.coverImage"
-              :alt="entry.result.meta.title_romaji"
-              width="60"
-              height="90"
-              object-fit="cover"
-              class="history__card-cover"
-              preview-disabled
-            />
-            <div class="history__card-info">
-              <span class="history__card-title">{{ entry.result.meta.title_romaji }}</span>
-              <span class="history__card-subtitle">{{ entry.result.meta.title_english }}</span>
-            </div>
-            <span class="history__card-score">
-              {{ beautifyNumber(entry.result.final_score, 1) }}
-            </span>
+        <div class="history__item">
+          <div class="history__card-stack" :class="{ 'history__card-stack--stacked': entry.entry_count > 1 }">
+            <NCard class="history__card">
+              <div class="history__card-content">
+                <NImage
+                  :src="entry.cover_image"
+                  :alt="entry.title_romaji"
+                  width="48"
+                  height="72"
+                  object-fit="cover"
+                  class="history__card-cover"
+                  preview-disabled
+                />
+                <div class="history__card-info">
+                  <span class="history__card-title">{{ entry.title_romaji }}</span>
+                  <span class="history__card-subtitle">{{ entry.format }}</span>
+                  <span class="history__card-date">{{ formatTime(entry.scored_at) }}</span>
+                </div>
+                <span class="history__card-score" :style="{ color: `var(--color-score-${scoreTier(entry.final_score)})` }">
+                  {{ beautifyNumber(entry.final_score, 2) }}
+                </span>
+              </div>
+            </NCard>
           </div>
-        </NCard>
+          <NButton text @click="handleHide(entry.score_id)">
+            <NIcon size="22" class="history__hide-icon">
+              <EyeOffOutline />
+            </NIcon>
+          </NButton>
+          <NButton text @click="handleDelete(entry.score_id)">
+            <NIcon size="22" class="history__delete-icon">
+              <TrashOutline />
+            </NIcon>
+          </NButton>
+        </div>
       </NTimelineItem>
     </NTimeline>
   </div>
@@ -85,19 +107,60 @@ function formatTime(time: number) {
     color: var(--color-text-subtle);
   }
 
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  &__card-stack {
+    flex: 1;
+    position: relative;
+
+    &--stacked {
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: var(--radius-sm);
+        background: var(--n-color, rgba(255, 255, 255, 0.06));
+        border: 1px solid var(--n-border-color, rgba(255, 255, 255, 0.1));
+        z-index: -1;
+      }
+
+      &::before {
+        transform: translate(10px, 10px);
+      }
+
+      &::after {
+        transform: translate(5px, 5px);
+      }
+    }
+  }
+
   &__card {
-    cursor: pointer;
+    position: relative;
+    z-index: 0;
+  }
+
+  &__card-cover {
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+  }
+
+  &__hide-icon {
+    color: var(--color-score-ok);
+  }
+
+  &__delete-icon {
+    color: var(--color-danger);
   }
 
   &__card-content {
     display: flex;
     align-items: center;
     gap: var(--space-4);
-  }
-
-  &__card-cover {
-    border-radius: var(--radius-sm);
-    flex-shrink: 0;
   }
 
   &__card-info {
@@ -116,6 +179,11 @@ function formatTime(time: number) {
   }
 
   &__card-subtitle {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-subtle);
+  }
+
+  &__card-date {
     font-size: var(--font-size-xs);
     color: var(--color-text-subtle);
   }

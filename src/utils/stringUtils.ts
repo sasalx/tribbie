@@ -17,6 +17,18 @@ export function displayAltMediaTitle(titleEnglish?: string, titleNative?: string
   return titleEnglish || titleNative || ''
 }
 
+export function scoreTier(score: number): 'perfect' | 'great' | 'good' | 'ok' | 'bad' {
+  if (score === 10)
+    return 'perfect'
+  if (score >= 8)
+    return 'great'
+  if (score >= 6)
+    return 'good'
+  if (score >= 4)
+    return 'ok'
+  return 'bad'
+}
+
 export function hamiltonPercentages(values: number[], decimals = 1): string[] {
   if (values.length === 0) {
     return []

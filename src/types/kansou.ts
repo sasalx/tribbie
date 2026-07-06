@@ -88,3 +88,15 @@ export interface WeightsResponse {
   effective_weight_sum: number
   primary_genre_weight: number
 }
+
+export interface HistoryItem {
+  anilist_id: number
+  cover_image: string
+  entry_count: number
+  final_score: number
+  format: string
+  media_type: string
+  score_id: number
+  scored_at: string
+  title_romaji: string
+}
