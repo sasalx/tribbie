@@ -21,7 +21,7 @@ export function useLiveWeights(getParams: () => WeightsRequestBody | null, debou
     error.value = null
 
     try {
-      const response = await api.post<WeightsResponse>('/weights', body)
+      const response = await api.post<WeightsResponse>('/v1/weights', body)
       if (currentRequestId === requestId) {
         weights.value = response
       }

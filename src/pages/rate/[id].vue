@@ -28,8 +28,8 @@ const { id } = useRoute('/rate/[id]').params
 
 onMounted(async () => {
   const [dimensionsData, mediaData] = await Promise.all([
-    api.get<DimensionsResponse>('/dimensions'),
-    api.get<MediaResponse>(`/media/${id}`),
+    api.get<DimensionsResponse>('/v1/dimensions'),
+    api.get<MediaResponse>(`/v1/media/${id}`),
   ])
 
   dimensions.value = dimensionsData
@@ -95,7 +95,7 @@ async function handleSubmit() {
     return
   }
 
-  const result = await api.post<ScoreResultResponse>('/score', {
+  const result = await api.post<ScoreResultResponse>('/v1/score', {
     media_id: Number(id),
     scores: Object.fromEntries(
       Object.entries(fields.value)

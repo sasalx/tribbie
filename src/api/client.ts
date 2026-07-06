@@ -5,7 +5,7 @@ export interface RequestOptions extends RequestInit {
 async function request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
   const { params, ...init } = options
 
-  let url = `${import.meta.env.VITE_API_BASE_URL}${endpoint}`
+  let url = `${import.meta.env.VITE_API_BASE_URL}/api${endpoint}`
 
   if (params) {
     url += `?${new URLSearchParams(

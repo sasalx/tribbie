@@ -115,7 +115,7 @@ function scoreToColor(finalScore: number): string {
 async function handlePublish() {
   isPublishLoading.value = true
 
-  await api.post('/score/publish', {
+  await api.post('/v1/score/publish', {
     media_id: result.meta.media_id,
     score: Number(beautifyNumber(result.final_score, 1)),
     notes: addNotes.value ? scoreTableAsNotes.value : '',

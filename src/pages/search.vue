@@ -26,7 +26,7 @@ async function handleSearch() {
       ...(mediaType.value ? { type: mediaType.value } : { type: undefined }),
     },
   })
-  results.value = await api.get<MediaResponse[]>('/media/search', {
+  results.value = await api.get<MediaResponse[]>('/v1/media/search', {
     params: {
       q: query.value,
       ...(mediaType.value && { type: mediaType.value }),
