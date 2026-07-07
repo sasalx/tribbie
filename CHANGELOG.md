@@ -1,4 +1,21 @@
 
+## [0.3.0](https://github.com/sasalx/tribbie/compare/v0.2.0...v0.3.0) (2026-07-07)
+
+### Features
+
+* **history:** shuffle animation for stacked cards ([a6ddbba](https://github.com/sasalx/tribbie/commit/a6ddbba2a49b3741e099097e357eafdc7b2e71b8))
+* **history:** use api for history showcase ([3667420](https://github.com/sasalx/tribbie/commit/3667420a731ca1081fb7c24368351bbdac6f2133))
+
+### Chores
+
+* **api:** use new endpoint syntax ([c2519be](https://github.com/sasalx/tribbie/commit/c2519beef8fa0e9b050b591ce9a2f0cc5eb25f37))
+* **history:** remove local storage history logic ([43e9676](https://github.com/sasalx/tribbie/commit/43e967692d16c862680408560360f15feb5dbded))
+* **release:** bump version to 0.3.0 ([03ee3de](https://github.com/sasalx/tribbie/commit/03ee3dec5f8a09daef1a2000cbc24d2e186ffc0b))
+
+### Refactors
+
+* **app:** remove unocss and use sass instead ([5850ce6](https://github.com/sasalx/tribbie/commit/5850ce6c970542f249550916ece8788626acad48))
+
 ## [0.2.0](https://github.com/sasalx/tribbie/compare/v0.1.0...v0.2.0) (2026-07-01)
 
 ### Features
@@ -15,7 +32,7 @@
 
 * **pipeline:** create release pipeline ([612837f](https://github.com/sasalx/tribbie/commit/612837f711df48f5efac58acb6a69dce269a80c3))
 * **readme:** add "what I learned" section ([4ae0fc6](https://github.com/sasalx/tribbie/commit/4ae0fc6a1c465c12651f272f8d8546d32b57769a))
-* **release:** bump version to 0.2.0 ([d0592d7](https://github.com/sasalx/tribbie/commit/d0592d7abf26ea58cb37a49be622829fcf0574b0))
+* **release:** bump version to 0.2.0 ([838d332](https://github.com/sasalx/tribbie/commit/838d332dd6333faa64a85829d31afc0c6fada993))
 
 ### Refactors
 
