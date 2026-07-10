@@ -12,7 +12,10 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BannerImage: typeof import('./src/components/BannerImage.vue')['default']
+    DimensionsTab: typeof import('./src/components/settings/DimensionsTab.vue')['default']
+    GeneralTab: typeof import('./src/components/settings/GeneralTab.vue')['default']
     GenreSelector: typeof import('./src/components/GenreSelector.vue')['default']
+    GenresTab: typeof import('./src/components/settings/GenresTab.vue')['default']
     MediaCard: typeof import('./src/components/MediaCard.vue')['default']
     MediaHeroSection: typeof import('./src/components/MediaHeroSection.vue')['default']
     NButton: typeof import('naive-ui')['NButton']
@@ -43,6 +46,8 @@ declare module 'vue' {
     NSkeleton: typeof import('naive-ui')['NSkeleton']
     NSpin: typeof import('naive-ui')['NSpin']
     NSwitch: typeof import('naive-ui')['NSwitch']
+    NTabPane: typeof import('naive-ui')['NTabPane']
+    NTabs: typeof import('naive-ui')['NTabs']
     NTag: typeof import('naive-ui')['NTag']
     NTimeline: typeof import('naive-ui')['NTimeline']
     NTimelineItem: typeof import('naive-ui')['NTimelineItem']

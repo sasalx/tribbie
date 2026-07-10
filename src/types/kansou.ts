@@ -89,6 +89,23 @@ export interface WeightsResponse {
   primary_genre_weight: number
 }
 
+export interface ConfigDimension {
+  bias_resistant: boolean
+  description: string
+  label: string
+  weight: number
+}
+
+export interface ConfigResponse {
+  config_hash: string
+  dimension_order: string[]
+  dimensions: Record<string, ConfigDimension>
+  genres: Record<string, Record<string, number>>
+  max_history: number
+  max_multiplier: number
+  primary_genre_weight: number
+}
+
 export interface HistoryItem {
   anilist_id: number
   cover_image: string

@@ -84,6 +84,25 @@ export default {
   },
   settings: {
     title: 'Settings',
-    empty: 'No settings yet.',
+    tabs: {
+      general: 'General',
+      dimensions: 'Dimensions',
+      genres: 'Genres',
+    },
+    dimensions: {
+      title: 'Dimensions',
+      subtitle: '{count} dimensions · weights should sum to 1.00',
+      addButton: '+ Add',
+      descriptionLabel: 'Description',
+      weightLabel: 'Weight',
+      biasResistant: 'Bias-resistant',
+      biasResistantHint: 'Excluded from reviewer-bias normalization',
+      errorTotalExceeds: 'Total weight must not exceed 1',
+      errorNoDimensions: 'At least one dimension is required',
+      deleteButton: 'Delete dimension',
+      deleteConfirm: 'Delete this dimension? This can\'t be undone.',
+      deleteCancel: 'Cancel',
+      deleteConfirmButton: 'Yes, delete!',
+    },
   },
 }
