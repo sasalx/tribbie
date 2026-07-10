@@ -26,6 +26,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - run: pnpm build
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
 
       - name: Zip dist
         run: zip -r tribbie-${{ github.ref_name }}.zip dist/
