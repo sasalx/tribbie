@@ -40,5 +40,5 @@ jobs:
           awk "/^## \[${VERSION}\]/{found=1; next} /^## \[/{if(found) exit} found{print}" CHANGELOG.md > release-notes.md
           gh release create ${{ github.ref_name }} \
             tribbie-${{ github.ref_name }}.zip \
-            --title "${{ github.ref_name }} - $(jq -r '."release-name"' package.json)" \
+            --title "${{ github.ref_name }}" \
             --notes-file release-notes.md

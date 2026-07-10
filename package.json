@@ -2,7 +2,6 @@
   "name": "tribbie",
   "type": "module",
   "version": "0.3.0",
-  "release-name": "Busy Day",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
