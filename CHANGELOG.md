@@ -1,4 +1,18 @@
 
+## [0.3.1](https://github.com/sasalx/tribbie/compare/v0.3.0...v0.3.1) (2026-07-10)
+
+### Bug Fixes
+
+* **pipeline:** add env value ([f4475d9](https://github.com/sasalx/tribbie/commit/f4475d9972ab4241ab79a3757dd3469e74265252))
+
+### Chores
+
+* **release:** bump version to 0.3.1 ([d175106](https://github.com/sasalx/tribbie/commit/d175106a009dea6539a74e83b79555d2f6cc984c))
+
+### Refactors
+
+* **pipeline:** remove release-name param ([70d9a4e](https://github.com/sasalx/tribbie/commit/70d9a4ec76b3162b2b8e1fd46de521b71e61afad))
+
 ## [0.3.0](https://github.com/sasalx/tribbie/compare/v0.2.0...v0.3.0) (2026-07-07)
 
 ### Features
@@ -10,7 +24,7 @@
 
 * **api:** use new endpoint syntax ([c2519be](https://github.com/sasalx/tribbie/commit/c2519beef8fa0e9b050b591ce9a2f0cc5eb25f37))
 * **history:** remove local storage history logic ([43e9676](https://github.com/sasalx/tribbie/commit/43e967692d16c862680408560360f15feb5dbded))
-* **release:** bump version to 0.3.0 ([03ee3de](https://github.com/sasalx/tribbie/commit/03ee3dec5f8a09daef1a2000cbc24d2e186ffc0b))
+* **release:** bump version to 0.3.0 ([f99c80c](https://github.com/sasalx/tribbie/commit/f99c80c121946b403913fc801e929216b25ac13c))
 
 ### Refactors
 
