@@ -1,4 +1,4 @@
-import type { MediaType } from './anilist'
+import type { Genre, MediaType } from './anilist'
 
 export interface Dimension {
   key: string
@@ -40,9 +40,9 @@ export interface ScoreResultMeta {
   title_english: string
   media_type: MediaType
   anilist_url: string
-  all_genres: string[]
-  matched_genres: string[]
-  genres_active: string[]
+  all_genres: Genre[]
+  matched_genres: Genre[]
+  genres_active: Genre[]
   config_hash: string
   primary_genre: string
   primary_genre_weight: number

@@ -2,6 +2,11 @@ export type MediaFormat = 'TV' | 'TV_SHORT' | 'MOVIE' | 'SPECIAL' | 'OVA' | 'ONA
 export type MediaStatus = 'FINISHED' | 'RELEASING' | 'NOT_YET_RELEASED' | 'CANCELLED' | 'HIATUS'
 export type MediaType = 'ANIME' | 'MANGA'
 
+export interface Genre {
+  Name: string
+  IsConfigured: boolean
+}
+
 export interface MediaResponse {
   id: number
   title_romaji: string
@@ -10,7 +15,7 @@ export interface MediaResponse {
   format: MediaFormat
   status: MediaStatus
   episodes: number
-  genres: string[]
+  genres: Genre[]
   cover_image: string
   banner_image: string
   average_score: number
