@@ -45,8 +45,8 @@ function handleClick() {
         <div class="media-card__meta">
           <span class="media-card__meta-label">Genres</span>
           <div class="media-card__genres">
-            <NTag v-for="genre in data.genres" :key="genre.Name" :bordered="false" size="small">
-              {{ toFirstLetterCapitalString(genre.Name) }}
+            <NTag v-for="genre in data.genres" :key="genre.name" :bordered="false" size="small">
+              {{ toFirstLetterCapitalString(genre.name) }}
             </NTag>
           </div>
         </div>

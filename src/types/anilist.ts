@@ -3,8 +3,8 @@ export type MediaStatus = 'FINISHED' | 'RELEASING' | 'NOT_YET_RELEASED' | 'CANCE
 export type MediaType = 'ANIME' | 'MANGA'
 
 export interface Genre {
-  Name: string
-  IsConfigured: boolean
+  name: string
+  is_configured: boolean
 }
 
 export interface MediaResponse {

@@ -14,13 +14,13 @@ const primaryGenre = defineModel<string | null>('dropdown', { default: null })
 const selectedGenres = defineModel<string[]>('tags', { default: () => [] })
 
 const options = computed(() =>
-  props.genres.map(genre => ({ label: toFirstLetterCapitalString(genre.Name), value: genre.Name })),
+  props.genres.map(genre => ({ label: toFirstLetterCapitalString(genre.name), value: genre.name })),
 )
 const hasError = computed(() => selectedGenres.value.length === 0)
 
 watch(
   () => props.genres,
-  (genres) => { selectedGenres.value = genres.map(genre => genre.Name) },
+  (genres) => { selectedGenres.value = genres.map(genre => genre.name) },
   { immediate: true },
 )
 
