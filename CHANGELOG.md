@@ -1,4 +1,19 @@
 
+## [0.4.0](https://github.com/sasalx/tribbie/compare/v0.3.1...v0.4.0) (2026-07-15)
+
+### Features
+
+* **app:** switch to new genre object type ([4316dee](https://github.com/sasalx/tribbie/commit/4316dee2d63e67f264697c5da56774cdfee618fd))
+* **dimension-settings:** new dimension logic ([0da03c2](https://github.com/sasalx/tribbie/commit/0da03c2fb67bd84bec0493e392335c932d2896dd))
+* **dimensions-settings:** create page & fill it with endpoint response ([d222f29](https://github.com/sasalx/tribbie/commit/d222f29a9565713917f2dbc8506c9cecfeefb12f))
+* **settings:** add db type check ([84b30ac](https://github.com/sasalx/tribbie/commit/84b30acf88ce021b5c9aa3bdd17ac7afa49fce5b))
+* **settings:** add global save logic ([751df5d](https://github.com/sasalx/tribbie/commit/751df5d9219d683719e55049790366266ded71f9))
+
+### Chores
+
+* **api:** add "Accept" header for api calls ([0a5ee88](https://github.com/sasalx/tribbie/commit/0a5ee88d6ab1dace5a04b24a7f2bcb8dec96a904))
+* **release:** bump version to 0.4.0 ([6b9cbec](https://github.com/sasalx/tribbie/commit/6b9cbec98c4fd5c267b6028fe931316e06adf2d4))
+
 ## [0.3.1](https://github.com/sasalx/tribbie/compare/v0.3.0...v0.3.1) (2026-07-10)
 
 ### Bug Fixes
@@ -7,7 +22,7 @@
 
 ### Chores
 
-* **release:** bump version to 0.3.1 ([d175106](https://github.com/sasalx/tribbie/commit/d175106a009dea6539a74e83b79555d2f6cc984c))
+* **release:** bump version to 0.3.1 ([00eeb11](https://github.com/sasalx/tribbie/commit/00eeb116e8a2ebac5bbdff9fe15f49553702bbc5))
 
 ### Refactors
 
