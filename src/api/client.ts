@@ -23,7 +23,8 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
   })
 
   if (!response.ok) {
-    throw new Error(`${response.status} ${response.statusText}`)
+    const body = await response.json().catch(() => null)
+    throw new Error(body?.error ?? `${response.status} ${response.statusText}`)
   }
 
   return response.json() as Promise<T>

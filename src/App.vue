@@ -42,39 +42,41 @@ function handleMenuSelect(key: string) {
 <template>
   <NConfigProvider :theme="darkTheme">
     <NNotificationProvider>
-      <NLayout class="app-layout" has-sider>
-        <NLayoutSider
-          v-model:collapsed="collapsed"
-          bordered
-          collapse-mode="width"
-          :collapsed-width="64"
-          :width="220"
-          show-trigger
-        >
-          <div class="app-sidebar__header">
-            <img
-              src="/tribbie.png"
-              alt="Tribbie"
-              class="app-sidebar__logo"
-            >
-            <Transition name="title-fade">
-              <span v-if="!collapsed" class="app-sidebar__title tribbie-title">
-                Tribbie's Scorekeeper
-              </span>
-            </Transition>
-          </div>
-          <NMenu
-            :value="route.path"
-            :options="menuOptions"
+      <NMessageProvider>
+        <NLayout class="app-layout" has-sider>
+          <NLayoutSider
+            v-model:collapsed="collapsed"
+            bordered
+            collapse-mode="width"
             :collapsed-width="64"
-            @update:value="handleMenuSelect"
-          />
-        </NLayoutSider>
+            :width="220"
+            show-trigger
+          >
+            <div class="app-sidebar__header">
+              <img
+                src="/tribbie.png"
+                alt="Tribbie"
+                class="app-sidebar__logo"
+              >
+              <Transition name="title-fade">
+                <span v-if="!collapsed" class="app-sidebar__title tribbie-title">
+                  Tribbie's Scorekeeper
+                </span>
+              </Transition>
+            </div>
+            <NMenu
+              :value="route.path"
+              :options="menuOptions"
+              :collapsed-width="64"
+              @update:value="handleMenuSelect"
+            />
+          </NLayoutSider>
 
-        <NLayoutContent id="app-content" class="contain-layout" content-class="app-layout__content">
-          <RouterView />
-        </NLayoutContent>
-      </NLayout>
+          <NLayoutContent id="app-content" class="contain-layout" content-class="app-layout__content">
+            <RouterView />
+          </NLayoutContent>
+        </NLayout>
+      </NMessageProvider>
     </NNotificationProvider>
   </NConfigProvider>
 </template>

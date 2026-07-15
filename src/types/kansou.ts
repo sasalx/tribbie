@@ -98,7 +98,6 @@ export interface ConfigDimension {
 
 export interface ConfigResponse {
   config_hash: string
-  dimension_order: string[]
   dimensions: Record<string, ConfigDimension>
   genres: Record<string, Record<string, number>>
   max_history: number

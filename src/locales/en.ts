@@ -91,7 +91,7 @@ export default {
     },
     dimensions: {
       title: 'Dimensions',
-      subtitle: '{count} dimensions · weights should sum to 1.00',
+      subtitle: 'Weights should sum to 1.00',
       addButton: '+ Add',
       descriptionLabel: 'Description',
       weightLabel: 'Weight',
@@ -103,6 +103,17 @@ export default {
       deleteConfirm: 'Delete this dimension? This can\'t be undone.',
       deleteCancel: 'Cancel',
       deleteConfirmButton: 'Yes, delete!',
+      addModal: {
+        title: 'Add Dimension',
+        keyLabel: 'Key',
+        keyPlaceholder: 'e.g. story, visuals',
+        labelLabel: 'Label',
+        labelPlaceholder: 'Display name',
+        confirm: 'Add',
+        cancel: 'Cancel',
+        errorKeyExists: 'Key already exists',
+        errorWeightExceeds: 'Adding this weight would exceed 1.00 total',
+      },
     },
   },
 }
