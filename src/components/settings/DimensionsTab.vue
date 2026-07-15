@@ -2,9 +2,9 @@
 import type { ConfigDimension, ConfigResponse } from '~/types/kansou'
 import { ChevronDownOutline } from '@vicons/ionicons5'
 import { useMessage } from 'naive-ui'
-import { api } from '~/api/client'
 
 const props = defineProps<{ config: ConfigResponse }>()
+const emit = defineEmits<{ 'update:dimensions': [dimensions: Record<string, ConfigDimension>] }>()
 
 const { t } = useI18n()
 const message = useMessage()
@@ -14,6 +14,10 @@ const expandedKey = ref<string | null>(null)
 const confirmDeleteKey = ref<string | null>(null)
 const showAddModal = ref(false)
 const newDimension = reactive({ label: '', description: '', weight: 0.1 as number | null, biasResistant: false })
+
+watch(localDimensions, (value) => {
+  emit('update:dimensions', value)
+}, { deep: true })
 
 const weightSum = computed(() => {
   const sum = Object.values(localDimensions.value).reduce((total, dimension) => total + dimension.weight, 0)
@@ -94,11 +98,6 @@ async function handleAddConfirm() {
     bias_resistant: newDimension.biasResistant,
   }
   showAddModal.value = false
-
-  api.post<ConfigResponse>('/v1/config', {
-    ...props.config,
-    dimensions: localDimensions.value,
-  })
 }
 </script>
 
@@ -127,8 +126,8 @@ async function handleAddConfirm() {
       </div>
     </div>
 
-    <div v-for="(dimension, index) in localDimensions" :key="index" class="dimensions-tab__card">
-      <div class="dimensions-tab__card-header" @click="toggleExpand(index)">
+    <div v-for="(dimension, key) in localDimensions" :key="key" class="dimensions-tab__card">
+      <div class="dimensions-tab__card-header" @click="toggleExpand(key)">
         <div class="dimensions-tab__card-label-group">
           <span class="dimensions-tab__card-label">{{ dimension.label }}</span>
           <span class="dimensions-tab__card-weight-pill">{{ Math.round(dimension.weight * 100) }}%</span>
@@ -136,13 +135,13 @@ async function handleAddConfirm() {
         <NIcon
           size="16"
           class="dimensions-tab__chevron"
-          :class="{ 'dimensions-tab__chevron--open': expandedKey === index }"
+          :class="{ 'dimensions-tab__chevron--open': expandedKey === key }"
         >
           <ChevronDownOutline />
         </NIcon>
       </div>
 
-      <template v-if="expandedKey === index">
+      <template v-if="expandedKey === key">
         <div class="dimensions-tab__card-body">
           <div class="dimensions-tab__field">
             <span class="dimensions-tab__field-label">{{ t('settings.dimensions.descriptionLabel') }}</span>
@@ -171,8 +170,8 @@ async function handleAddConfirm() {
             </div>
           </div>
           <NDivider />
-          <div v-if="confirmDeleteKey !== index" class="dimensions-tab__delete">
-            <NButton text type="error" @click="handleDeleteClick(index)">
+          <div v-if="confirmDeleteKey !== key" class="dimensions-tab__delete">
+            <NButton text type="error" @click="handleDeleteClick(key)">
               {{ t('settings.dimensions.deleteButton') }}
             </NButton>
           </div>
@@ -182,7 +181,7 @@ async function handleAddConfirm() {
               <NButton size="small" @click="handleDeleteCancel">
                 {{ t('settings.dimensions.deleteCancel') }}
               </NButton>
-              <NButton size="small" type="error" @click="handleDeleteConfirm(index)">
+              <NButton size="small" type="error" @click="handleDeleteConfirm(key)">
                 {{ t('settings.dimensions.deleteConfirmButton') }}
               </NButton>
             </div>

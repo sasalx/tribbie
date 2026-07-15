@@ -84,6 +84,9 @@ export default {
   },
   settings: {
     title: 'Settings',
+    saveButton: 'Save',
+    saveSuccess: 'Settings saved',
+    saveError: 'Failed to save settings',
     unsupportedDb: {
       title: 'Settings Unavailable',
       description: 'Settings can only be configured when using a SQLite database.',
