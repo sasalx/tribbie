@@ -84,6 +84,10 @@ export default {
   },
   settings: {
     title: 'Settings',
+    unsupportedDb: {
+      title: 'Settings Unavailable',
+      description: 'Settings can only be configured when using a SQLite database.',
+    },
     tabs: {
       general: 'General',
       dimensions: 'Dimensions',

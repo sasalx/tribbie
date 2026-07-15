@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ConfigResponse } from '~/types/kansou'
+import type { ConfigResponse, DbInfo } from '~/types/kansou'
 import { api } from '~/api/client'
 import DimensionsTab from '~/components/settings/DimensionsTab.vue'
 import GeneralTab from '~/components/settings/GeneralTab.vue'
@@ -9,10 +9,16 @@ const { t } = useI18n()
 
 const activeTab = ref('general')
 const config = ref<ConfigResponse | null>(null)
+const dbInfo = ref<DbInfo | null>(null)
 const isLoading = ref(true)
 
 onMounted(async () => {
-  config.value = await api.get<ConfigResponse>('/v1/config')
+  dbInfo.value = await api.get<DbInfo>('/v1/db-info')
+
+  if (dbInfo.value.db === 'sqlite') {
+    config.value = await api.get<ConfigResponse>('/v1/config')
+  }
+
   isLoading.value = false
 })
 </script>
@@ -22,7 +28,16 @@ onMounted(async () => {
     <h1 class="settings__title">
       {{ t('settings.title') }}
     </h1>
+
     <NSpin v-if="isLoading" />
+
+    <NResult
+      v-else-if="dbInfo?.db !== 'sqlite'"
+      status="403"
+      :title="t('settings.unsupportedDb.title')"
+      :description="t('settings.unsupportedDb.description')"
+    />
+
     <NTabs v-else v-model:value="activeTab" type="line" animated>
       <NTabPane name="general" :tab="t('settings.tabs.general')">
         <GeneralTab :config="config!" />

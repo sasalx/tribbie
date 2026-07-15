@@ -1,5 +1,26 @@
 import type { Genre, MediaType } from './anilist'
 
+export interface DbInfo {
+  db: string
+  live_config: boolean
+}
+
+export interface ConfigDimension {
+  bias_resistant: boolean
+  description: string
+  label: string
+  weight: number
+}
+
+export interface ConfigResponse {
+  config_hash: string
+  dimensions: Record<string, ConfigDimension>
+  genres: Record<string, Record<string, number>>
+  max_history: number
+  max_multiplier: number
+  primary_genre_weight: number
+}
+
 export interface Dimension {
   key: string
   label: string
@@ -10,6 +31,34 @@ export interface Dimension {
 export interface DimensionsResponse {
   config_hash: string
   dimensions: Dimension[]
+}
+
+export interface WeightsRequestBody {
+  media_id: number
+  primary_genre: string
+  selected_genres: string[]
+  skipped_dimensions?: Record<string, boolean>
+  weight_overrides?: Record<string, number>
+}
+
+export interface WeightsResponseDimension {
+  key: string
+  label: string
+  base_weight: number
+  multiplier: number
+  effective_weight: number
+  final_weight: number
+  primary_genre_multiplier?: number
+  secondary_genres_multiplier?: number
+  bias_resistant: boolean
+  weight_override: boolean
+  skipped: boolean
+}
+
+export interface WeightsResponse {
+  dimensions: WeightsResponseDimension[]
+  effective_weight_sum: number
+  primary_genre_weight: number
 }
 
 export interface GenerateScoreBody {
@@ -59,50 +108,6 @@ export interface PublishScoreBody {
   media_id: number
   notes: string
   score: number
-}
-
-export interface WeightsRequestBody {
-  media_id: number
-  primary_genre: string
-  selected_genres: string[]
-  skipped_dimensions?: Record<string, boolean>
-  weight_overrides?: Record<string, number>
-}
-
-export interface WeightsResponseDimension {
-  key: string
-  label: string
-  base_weight: number
-  multiplier: number
-  effective_weight: number
-  final_weight: number
-  primary_genre_multiplier?: number
-  secondary_genres_multiplier?: number
-  bias_resistant: boolean
-  weight_override: boolean
-  skipped: boolean
-}
-
-export interface WeightsResponse {
-  dimensions: WeightsResponseDimension[]
-  effective_weight_sum: number
-  primary_genre_weight: number
-}
-
-export interface ConfigDimension {
-  bias_resistant: boolean
-  description: string
-  label: string
-  weight: number
-}
-
-export interface ConfigResponse {
-  config_hash: string
-  dimensions: Record<string, ConfigDimension>
-  genres: Record<string, Record<string, number>>
-  max_history: number
-  max_multiplier: number
-  primary_genre_weight: number
 }
 
 export interface HistoryItem {
