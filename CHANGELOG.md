@@ -1,4 +1,11 @@
 
+## [0.4.1](https://github.com/sasalx/tribbie/compare/v0.4.0...v0.4.1) (2026-07-15)
+
+### Chores
+
+* **release:** bump version to 0.4.1 ([2453560](https://github.com/sasalx/tribbie/commit/24535609cd708da72d859a9e9faa300ba5300b00))
+* **types:** use the newest genre type once again ([909d858](https://github.com/sasalx/tribbie/commit/909d8581894819bee4778f6a63220236cf2783b0))
+
 ## [0.4.0](https://github.com/sasalx/tribbie/compare/v0.3.1...v0.4.0) (2026-07-15)
 
 ### Features
@@ -12,7 +19,7 @@
 ### Chores
 
 * **api:** add "Accept" header for api calls ([0a5ee88](https://github.com/sasalx/tribbie/commit/0a5ee88d6ab1dace5a04b24a7f2bcb8dec96a904))
-* **release:** bump version to 0.4.0 ([6b9cbec](https://github.com/sasalx/tribbie/commit/6b9cbec98c4fd5c267b6028fe931316e06adf2d4))
+* **release:** bump version to 0.4.0 ([d28da64](https://github.com/sasalx/tribbie/commit/d28da6432b9e2ce4e1eff5bbc8da93ec3eb9e708))
 
 ## [0.3.1](https://github.com/sasalx/tribbie/compare/v0.3.0...v0.3.1) (2026-07-10)
 
