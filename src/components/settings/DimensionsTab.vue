@@ -27,8 +27,8 @@ const weightSum = computed(() => {
 
 const errors = computed(() => {
   const result: string[] = []
-  if (weightSum.value.value > 1.005) {
-    result.push(t('settings.dimensions.errorTotalExceeds'))
+  if (!weightSum.value.ok) {
+    result.push(t('settings.dimensions.errorTotalNotOne'))
   }
 
   if (Object.keys(localDimensions.value).length === 0) {

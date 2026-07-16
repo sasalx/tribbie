@@ -104,7 +104,7 @@ export default {
       weightLabel: 'Weight',
       biasResistant: 'Bias-resistant',
       biasResistantHint: 'Excluded from reviewer-bias normalization',
-      errorTotalExceeds: 'Total weight must not exceed 1',
+      errorTotalNotOne: 'Total weight must be equal to 1',
       errorNoDimensions: 'At least one dimension is required',
       deleteButton: 'Delete dimension',
       deleteConfirm: 'Delete this dimension? This can\'t be undone.',
