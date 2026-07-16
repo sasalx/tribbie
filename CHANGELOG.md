@@ -1,9 +1,24 @@
 
+## [0.4.2](https://github.com/sasalx/tribbie/compare/v0.4.1...v0.4.2) (2026-07-16)
+
+### Features
+
+* **dimension-settings:** add scrollview for dimensions ([10a77a5](https://github.com/sasalx/tribbie/commit/10a77a5124bd7d7360c18c62ab2da83606e702d6))
+* **dimension-settings:** give error to user if total is below or above desired value ([f30ee8f](https://github.com/sasalx/tribbie/commit/f30ee8f960631917ce26d9678295d27630544630))
+
+### Bug Fixes
+
+* **settings:** broaden the settings db check ([d50f31c](https://github.com/sasalx/tribbie/commit/d50f31cab6a03e9909aed3041c83a87e079e602b))
+
+### Chores
+
+* **release:** bump version to 0.4.2 ([677c54c](https://github.com/sasalx/tribbie/commit/677c54c94d4bba3d6284887eef257c69f9818cdd))
+
 ## [0.4.1](https://github.com/sasalx/tribbie/compare/v0.4.0...v0.4.1) (2026-07-15)
 
 ### Chores
 
-* **release:** bump version to 0.4.1 ([2453560](https://github.com/sasalx/tribbie/commit/24535609cd708da72d859a9e9faa300ba5300b00))
+* **release:** bump version to 0.4.1 ([834c5b3](https://github.com/sasalx/tribbie/commit/834c5b3f349117dcb55e06f566d0ab397da2f876))
 * **types:** use the newest genre type once again ([909d858](https://github.com/sasalx/tribbie/commit/909d8581894819bee4778f6a63220236cf2783b0))
 
 ## [0.4.0](https://github.com/sasalx/tribbie/compare/v0.3.1...v0.4.0) (2026-07-15)
