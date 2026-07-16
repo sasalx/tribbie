@@ -14,11 +14,14 @@ const config = ref<ConfigResponse | null>(null)
 const dbInfo = ref<DbInfo | null>(null)
 const isLoading = ref(true)
 const isSaving = ref(false)
+const isNotUsingDatabase = ref(true)
 
 onMounted(async () => {
   dbInfo.value = await api.get<DbInfo>('/v1/db-info')
 
-  if (dbInfo.value.db === 'sqlite') {
+  isNotUsingDatabase.value = dbInfo.value.db === null && dbInfo.value.live_config === false
+
+  if (!isNotUsingDatabase.value) {
     config.value = await api.get<ConfigResponse>('/v1/config')
   }
 
@@ -54,7 +57,7 @@ async function handleSave() {
         {{ t('settings.title') }}
       </h1>
       <NButton
-        v-if="!isLoading && dbInfo?.db === 'sqlite'"
+        v-if="!isLoading && !isNotUsingDatabase"
         type="primary"
         :loading="isSaving"
         @click="handleSave"
@@ -66,7 +69,7 @@ async function handleSave() {
     <NSpin v-if="isLoading" />
 
     <NResult
-      v-else-if="dbInfo?.db !== 'sqlite'"
+      v-else-if="isNotUsingDatabase"
       status="403"
       :title="t('settings.unsupportedDb.title')"
       :description="t('settings.unsupportedDb.description')"
