@@ -126,68 +126,70 @@ async function handleAddConfirm() {
       </div>
     </div>
 
-    <div v-for="(dimension, key) in localDimensions" :key="key" class="dimensions-tab__card">
-      <div class="dimensions-tab__card-header" @click="toggleExpand(key)">
-        <div class="dimensions-tab__card-label-group">
-          <span class="dimensions-tab__card-label">{{ dimension.label }}</span>
-          <span class="dimensions-tab__card-weight-pill">{{ Math.round(dimension.weight * 100) }}%</span>
+    <div class="dimensions-tab__list">
+      <div v-for="(dimension, key) in localDimensions" :key="key" class="dimensions-tab__card">
+        <div class="dimensions-tab__card-header" @click="toggleExpand(key)">
+          <div class="dimensions-tab__card-label-group">
+            <span class="dimensions-tab__card-label">{{ dimension.label }}</span>
+            <span class="dimensions-tab__card-weight-pill">{{ Math.round(dimension.weight * 100) }}%</span>
+          </div>
+          <NIcon
+            size="16"
+            class="dimensions-tab__chevron"
+            :class="{ 'dimensions-tab__chevron--open': expandedKey === key }"
+          >
+            <ChevronDownOutline />
+          </NIcon>
         </div>
-        <NIcon
-          size="16"
-          class="dimensions-tab__chevron"
-          :class="{ 'dimensions-tab__chevron--open': expandedKey === key }"
-        >
-          <ChevronDownOutline />
-        </NIcon>
-      </div>
 
-      <template v-if="expandedKey === key">
-        <div class="dimensions-tab__card-body">
-          <div class="dimensions-tab__field">
-            <span class="dimensions-tab__field-label">{{ t('settings.dimensions.descriptionLabel') }}</span>
-            <NInput
-              v-model:value="dimension.description"
-              type="textarea"
-              :autosize="{ minRows: 2, maxRows: 2 }"
-            />
-          </div>
-          <div class="dimensions-tab__field">
-            <span class="dimensions-tab__field-label">{{ t('settings.dimensions.weightLabel') }}</span>
-            <NInputNumber
-              class="dimensions-tab__weight-input"
-              :value="dimension.weight"
-              :step="0.01"
-              :min="0"
-              :max="1"
-              @update:value="(value) => updateWeight(dimension, value)"
-            />
-          </div>
-          <div class="dimensions-tab__bias-row">
-            <NSwitch v-model:value="dimension.bias_resistant" />
-            <div class="dimensions-tab__bias-label">
-              <span>{{ t('settings.dimensions.biasResistant') }}</span>
-              <span class="dimensions-tab__bias-hint">{{ t('settings.dimensions.biasResistantHint') }}</span>
+        <template v-if="expandedKey === key">
+          <div class="dimensions-tab__card-body">
+            <div class="dimensions-tab__field">
+              <span class="dimensions-tab__field-label">{{ t('settings.dimensions.descriptionLabel') }}</span>
+              <NInput
+                v-model:value="dimension.description"
+                type="textarea"
+                :autosize="{ minRows: 2, maxRows: 2 }"
+              />
             </div>
-          </div>
-          <NDivider />
-          <div v-if="confirmDeleteKey !== key" class="dimensions-tab__delete">
-            <NButton text type="error" @click="handleDeleteClick(key)">
-              {{ t('settings.dimensions.deleteButton') }}
-            </NButton>
-          </div>
-          <div v-else class="dimensions-tab__delete-confirm">
-            <span class="dimensions-tab__delete-confirm-text">{{ t('settings.dimensions.deleteConfirm') }}</span>
-            <div class="dimensions-tab__delete-confirm-actions">
-              <NButton size="small" @click="handleDeleteCancel">
-                {{ t('settings.dimensions.deleteCancel') }}
-              </NButton>
-              <NButton size="small" type="error" @click="handleDeleteConfirm(key)">
-                {{ t('settings.dimensions.deleteConfirmButton') }}
+            <div class="dimensions-tab__field">
+              <span class="dimensions-tab__field-label">{{ t('settings.dimensions.weightLabel') }}</span>
+              <NInputNumber
+                class="dimensions-tab__weight-input"
+                :value="dimension.weight"
+                :step="0.01"
+                :min="0"
+                :max="1"
+                @update:value="(value) => updateWeight(dimension, value)"
+              />
+            </div>
+            <div class="dimensions-tab__bias-row">
+              <NSwitch v-model:value="dimension.bias_resistant" />
+              <div class="dimensions-tab__bias-label">
+                <span>{{ t('settings.dimensions.biasResistant') }}</span>
+                <span class="dimensions-tab__bias-hint">{{ t('settings.dimensions.biasResistantHint') }}</span>
+              </div>
+            </div>
+            <NDivider />
+            <div v-if="confirmDeleteKey !== key" class="dimensions-tab__delete">
+              <NButton text type="error" @click="handleDeleteClick(key)">
+                {{ t('settings.dimensions.deleteButton') }}
               </NButton>
             </div>
+            <div v-else class="dimensions-tab__delete-confirm">
+              <span class="dimensions-tab__delete-confirm-text">{{ t('settings.dimensions.deleteConfirm') }}</span>
+              <div class="dimensions-tab__delete-confirm-actions">
+                <NButton size="small" @click="handleDeleteCancel">
+                  {{ t('settings.dimensions.deleteCancel') }}
+                </NButton>
+                <NButton size="small" type="error" @click="handleDeleteConfirm(key)">
+                  {{ t('settings.dimensions.deleteConfirmButton') }}
+                </NButton>
+              </div>
+            </div>
           </div>
-        </div>
-      </template>
+        </template>
+      </div>
     </div>
 
     <NModal v-model:show="showAddModal">
@@ -309,11 +311,21 @@ async function handleAddConfirm() {
     }
   }
 
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-right: var(--space-1);
+  }
+
   &__card {
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-border);
     background: var(--color-surface);
     overflow: hidden;
+    flex-shrink: 0;
   }
 
   &__card-header {
